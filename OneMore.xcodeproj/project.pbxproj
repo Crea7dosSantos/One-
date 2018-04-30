@@ -7,14 +7,75 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2996F362EF4EF115A7D34A88 /* Pods_OneMore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E984F21B056B89ACB5C287 /* Pods_OneMore.framework */; };
+		5A06C95F2063A14800206CB7 /* Morning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06C95E2063A14800206CB7 /* Morning.swift */; };
+		5A06C9612063A16900206CB7 /* Night.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06C9602063A16900206CB7 /* Night.swift */; };
+		5A06C9632063A40100206CB7 /* UpperBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06C9622063A40100206CB7 /* UpperBody.swift */; };
+		5A06C9652063A42B00206CB7 /* LowerBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06C9642063A42B00206CB7 /* LowerBody.swift */; };
+		5A06C9672063A46C00206CB7 /* Chest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06C9662063A46C00206CB7 /* Chest.swift */; };
+		5A06C9692063A4C300206CB7 /* Back.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06C9682063A4C300206CB7 /* Back.swift */; };
+		5A06C96B2063A55300206CB7 /* Abs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06C96A2063A55300206CB7 /* Abs.swift */; };
+		5A06C96D2063A59700206CB7 /* Biceps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06C96C2063A59700206CB7 /* Biceps.swift */; };
+		5A06C96F2063A5C800206CB7 /* Triceps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06C96E2063A5C800206CB7 /* Triceps.swift */; };
+		5A06C9712063A5FD00206CB7 /* Sholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06C9702063A5FD00206CB7 /* Sholder.swift */; };
+		5A06C9732063A63400206CB7 /* Leg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06C9722063A63400206CB7 /* Leg.swift */; };
+		5A06C9752063A65900206CB7 /* Calf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06C9742063A65900206CB7 /* Calf.swift */; };
+		5A06C9782063D5A000206CB7 /* PostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06C9772063D5A000206CB7 /* PostData.swift */; };
+		5A13397B20921B3100B29064 /* AddWeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A13397A20921B3000B29064 /* AddWeight.swift */; };
+		5A1D6205208F34BB007D8BB5 /* DatePickerBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A1D6204208F34BB007D8BB5 /* DatePickerBarView.xib */; };
+		5A1D6207208F3510007D8BB5 /* XibDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1D6206208F3510007D8BB5 /* XibDateView.swift */; };
+		5A1FCBF420618709005250E0 /* button-stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A1FCBF320618708005250E0 /* button-stop.png */; };
+		5A31D5E32085EDFF0061C775 /* profielImageDefault.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A31D5E22085EDFF0061C775 /* profielImageDefault.png */; };
+		5A41A229207B70F600221ECD /* button-image-human.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A41A228207B70F600221ECD /* button-image-human.png */; };
+		5A41A22B207B731800221ECD /* button-enditing.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A41A22A207B731800221ECD /* button-enditing.png */; };
+		5A41A22D207B752300221ECD /* button-comment.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A41A22C207B752300221ECD /* button-comment.png */; };
+		5A41A22F207B784F00221ECD /* Noon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A41A22E207B784F00221ECD /* Noon.swift */; };
 		5A429660204D022100DAF97A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A42965F204D022100DAF97A /* AppDelegate.swift */; };
 		5A429662204D022100DAF97A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A429661204D022100DAF97A /* ViewController.swift */; };
 		5A429665204D022100DAF97A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A429663204D022100DAF97A /* Main.storyboard */; };
 		5A429667204D022100DAF97A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A429666204D022100DAF97A /* Assets.xcassets */; };
 		5A42966A204D022100DAF97A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A429668204D022100DAF97A /* LaunchScreen.storyboard */; };
+		5A5BC596208CCE000048476C /* SelfWeightPulsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5BC595208CCE000048476C /* SelfWeightPulsViewController.swift */; };
+		5A60E4652064D569006E3804 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A60E4632064D569006E3804 /* PostTableViewCell.swift */; };
+		5A60E4662064D569006E3804 /* PostTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A60E4642064D569006E3804 /* PostTableViewCell.xib */; };
+		5AA4E330204E8E9300160939 /* SelfWeightDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA4E32F204E8E9300160939 /* SelfWeightDataViewController.swift */; };
+		5AA4E332204E8EBD00160939 /* FriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA4E331204E8EBD00160939 /* FriendViewController.swift */; };
+		5AA4E334204E8EFD00160939 /* SelfManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA4E333204E8EFD00160939 /* SelfManagementViewController.swift */; };
+		5ABC7541204EA16E0022BE66 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5ABC7540204EA16E0022BE66 /* GoogleService-Info.plist */; };
+		5ABC7543204EC4AE0022BE66 /* AccountCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABC7542204EC4AE0022BE66 /* AccountCreateViewController.swift */; };
+		5ABC7548205054900022BE66 /* button-back.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABC7547205054900022BE66 /* button-back.png */; };
+		5ABC754A20505DBC0022BE66 /* LogoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABC754920505DBC0022BE66 /* LogoutViewController.swift */; };
+		5ABC75502053E7370022BE66 /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABC754F2053E7370022BE66 /* Const.swift */; };
+		5AECC413204D8C2F00EF2700 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AECC412204D8C2F00EF2700 /* LoginViewController.swift */; };
+		5AECC415204D8C6100EF2700 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AECC414204D8C6100EF2700 /* HomeViewController.swift */; };
+		5AECC417204D8C8100EF2700 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AECC416204D8C8100EF2700 /* PostViewController.swift */; };
+		5AECC41B204D941D00EF2700 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AECC41A204D941D00EF2700 /* SettingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		07E984F21B056B89ACB5C287 /* Pods_OneMore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneMore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A06C95E2063A14800206CB7 /* Morning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Morning.swift; sourceTree = "<group>"; };
+		5A06C9602063A16900206CB7 /* Night.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Night.swift; sourceTree = "<group>"; };
+		5A06C9622063A40100206CB7 /* UpperBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpperBody.swift; sourceTree = "<group>"; };
+		5A06C9642063A42B00206CB7 /* LowerBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LowerBody.swift; sourceTree = "<group>"; };
+		5A06C9662063A46C00206CB7 /* Chest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chest.swift; sourceTree = "<group>"; };
+		5A06C9682063A4C300206CB7 /* Back.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Back.swift; sourceTree = "<group>"; };
+		5A06C96A2063A55300206CB7 /* Abs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Abs.swift; sourceTree = "<group>"; };
+		5A06C96C2063A59700206CB7 /* Biceps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Biceps.swift; sourceTree = "<group>"; };
+		5A06C96E2063A5C800206CB7 /* Triceps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triceps.swift; sourceTree = "<group>"; };
+		5A06C9702063A5FD00206CB7 /* Sholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sholder.swift; sourceTree = "<group>"; };
+		5A06C9722063A63400206CB7 /* Leg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Leg.swift; sourceTree = "<group>"; };
+		5A06C9742063A65900206CB7 /* Calf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calf.swift; sourceTree = "<group>"; };
+		5A06C9772063D5A000206CB7 /* PostData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostData.swift; sourceTree = "<group>"; };
+		5A13397A20921B3000B29064 /* AddWeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWeight.swift; sourceTree = "<group>"; };
+		5A1D6204208F34BB007D8BB5 /* DatePickerBarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DatePickerBarView.xib; sourceTree = "<group>"; };
+		5A1D6206208F3510007D8BB5 /* XibDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibDateView.swift; sourceTree = "<group>"; };
+		5A1FCBF320618708005250E0 /* button-stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-stop.png"; sourceTree = "<group>"; };
+		5A31D5E22085EDFF0061C775 /* profielImageDefault.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profielImageDefault.png; sourceTree = "<group>"; };
+		5A41A228207B70F600221ECD /* button-image-human.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-image-human.png"; sourceTree = "<group>"; };
+		5A41A22A207B731800221ECD /* button-enditing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-enditing.png"; sourceTree = "<group>"; };
+		5A41A22C207B752300221ECD /* button-comment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-comment.png"; sourceTree = "<group>"; };
+		5A41A22E207B784F00221ECD /* Noon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Noon.swift; sourceTree = "<group>"; };
 		5A42965C204D022100DAF97A /* OneMore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneMore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A42965F204D022100DAF97A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5A429661204D022100DAF97A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -22,6 +83,23 @@
 		5A429666204D022100DAF97A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A429669204D022100DAF97A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5A42966B204D022100DAF97A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A5BC595208CCE000048476C /* SelfWeightPulsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfWeightPulsViewController.swift; sourceTree = "<group>"; };
+		5A60E4632064D569006E3804 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
+		5A60E4642064D569006E3804 /* PostTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostTableViewCell.xib; sourceTree = "<group>"; };
+		5AA4E32F204E8E9300160939 /* SelfWeightDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfWeightDataViewController.swift; sourceTree = "<group>"; };
+		5AA4E331204E8EBD00160939 /* FriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewController.swift; sourceTree = "<group>"; };
+		5AA4E333204E8EFD00160939 /* SelfManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfManagementViewController.swift; sourceTree = "<group>"; };
+		5ABC7540204EA16E0022BE66 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5ABC7542204EC4AE0022BE66 /* AccountCreateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreateViewController.swift; sourceTree = "<group>"; };
+		5ABC7547205054900022BE66 /* button-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-back.png"; sourceTree = "<group>"; };
+		5ABC754920505DBC0022BE66 /* LogoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutViewController.swift; sourceTree = "<group>"; };
+		5ABC754F2053E7370022BE66 /* Const.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
+		5AECC412204D8C2F00EF2700 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		5AECC414204D8C6100EF2700 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		5AECC416204D8C8100EF2700 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		5AECC41A204D941D00EF2700 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		75612EB2A4BCAD34A6F8A39A /* Pods-OneMore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneMore.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneMore/Pods-OneMore.debug.xcconfig"; sourceTree = "<group>"; };
+		D3A5E9F46E60ED49504DE884 /* Pods-OneMore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneMore.release.xcconfig"; path = "Pods/Target Support Files/Pods-OneMore/Pods-OneMore.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2996F362EF4EF115A7D34A88 /* Pods_OneMore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +119,8 @@
 			children = (
 				5A42965E204D022100DAF97A /* OneMore */,
 				5A42965D204D022100DAF97A /* Products */,
+				7C9624FFFFD6D3964265B5E3 /* Pods */,
+				C425AA8478C9732CDF182706 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,12 +137,82 @@
 			children = (
 				5A42965F204D022100DAF97A /* AppDelegate.swift */,
 				5A429661204D022100DAF97A /* ViewController.swift */,
+				5AECC412204D8C2F00EF2700 /* LoginViewController.swift */,
+				5ABC754920505DBC0022BE66 /* LogoutViewController.swift */,
+				5ABC7542204EC4AE0022BE66 /* AccountCreateViewController.swift */,
+				5AECC414204D8C6100EF2700 /* HomeViewController.swift */,
+				5AECC416204D8C8100EF2700 /* PostViewController.swift */,
+				5AECC41A204D941D00EF2700 /* SettingViewController.swift */,
+				5AA4E32F204E8E9300160939 /* SelfWeightDataViewController.swift */,
+				5AA4E331204E8EBD00160939 /* FriendViewController.swift */,
+				5AA4E333204E8EFD00160939 /* SelfManagementViewController.swift */,
+				5A5BC595208CCE000048476C /* SelfWeightPulsViewController.swift */,
+				5A60E4632064D569006E3804 /* PostTableViewCell.swift */,
+				5A1D6206208F3510007D8BB5 /* XibDateView.swift */,
+				5A42966B204D022100DAF97A /* Info.plist */,
+				5A60E4642064D569006E3804 /* PostTableViewCell.xib */,
+				5A1D6204208F34BB007D8BB5 /* DatePickerBarView.xib */,
 				5A429663204D022100DAF97A /* Main.storyboard */,
 				5A429666204D022100DAF97A /* Assets.xcassets */,
 				5A429668204D022100DAF97A /* LaunchScreen.storyboard */,
-				5A42966B204D022100DAF97A /* Info.plist */,
+				5ABC7540204EA16E0022BE66 /* GoogleService-Info.plist */,
+				5ABC754F2053E7370022BE66 /* Const.swift */,
+				5A06C9772063D5A000206CB7 /* PostData.swift */,
+				5AA859B12063D7AF00ADEB1C /* Realm */,
+				5ABC7544205053500022BE66 /* Resources */,
 			);
 			path = OneMore;
+			sourceTree = "<group>";
+		};
+		5AA859B12063D7AF00ADEB1C /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				5A06C95E2063A14800206CB7 /* Morning.swift */,
+				5A41A22E207B784F00221ECD /* Noon.swift */,
+				5A06C9602063A16900206CB7 /* Night.swift */,
+				5A06C9622063A40100206CB7 /* UpperBody.swift */,
+				5A06C9642063A42B00206CB7 /* LowerBody.swift */,
+				5A06C9662063A46C00206CB7 /* Chest.swift */,
+				5A06C9682063A4C300206CB7 /* Back.swift */,
+				5A06C96A2063A55300206CB7 /* Abs.swift */,
+				5A06C96C2063A59700206CB7 /* Biceps.swift */,
+				5A06C96E2063A5C800206CB7 /* Triceps.swift */,
+				5A06C9702063A5FD00206CB7 /* Sholder.swift */,
+				5A06C9722063A63400206CB7 /* Leg.swift */,
+				5A06C9742063A65900206CB7 /* Calf.swift */,
+				5A13397A20921B3000B29064 /* AddWeight.swift */,
+			);
+			path = Realm;
+			sourceTree = "<group>";
+		};
+		5ABC7544205053500022BE66 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5A31D5E22085EDFF0061C775 /* profielImageDefault.png */,
+				5A41A22C207B752300221ECD /* button-comment.png */,
+				5A41A22A207B731800221ECD /* button-enditing.png */,
+				5A41A228207B70F600221ECD /* button-image-human.png */,
+				5A1FCBF320618708005250E0 /* button-stop.png */,
+				5ABC7547205054900022BE66 /* button-back.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		7C9624FFFFD6D3964265B5E3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				75612EB2A4BCAD34A6F8A39A /* Pods-OneMore.debug.xcconfig */,
+				D3A5E9F46E60ED49504DE884 /* Pods-OneMore.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		C425AA8478C9732CDF182706 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				07E984F21B056B89ACB5C287 /* Pods_OneMore.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,9 +222,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5A42966E204D022100DAF97A /* Build configuration list for PBXNativeTarget "OneMore" */;
 			buildPhases = (
+				6747307F9C49FB7DF7E3B4EA /* [CP] Check Pods Manifest.lock */,
 				5A429658204D022100DAF97A /* Sources */,
 				5A429659204D022100DAF97A /* Frameworks */,
 				5A42965A204D022100DAF97A /* Resources */,
+				DD53170AB572396059DA62D9 /* [CP] Embed Pods Frameworks */,
+				5EDDC38E75B3B159647E07B8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -123,21 +277,106 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A31D5E32085EDFF0061C775 /* profielImageDefault.png in Resources */,
 				5A42966A204D022100DAF97A /* LaunchScreen.storyboard in Resources */,
+				5A41A229207B70F600221ECD /* button-image-human.png in Resources */,
+				5A60E4662064D569006E3804 /* PostTableViewCell.xib in Resources */,
+				5A41A22D207B752300221ECD /* button-comment.png in Resources */,
+				5A41A22B207B731800221ECD /* button-enditing.png in Resources */,
 				5A429667204D022100DAF97A /* Assets.xcassets in Resources */,
+				5A1FCBF420618709005250E0 /* button-stop.png in Resources */,
 				5A429665204D022100DAF97A /* Main.storyboard in Resources */,
+				5ABC7541204EA16E0022BE66 /* GoogleService-Info.plist in Resources */,
+				5A1D6205208F34BB007D8BB5 /* DatePickerBarView.xib in Resources */,
+				5ABC7548205054900022BE66 /* button-back.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5EDDC38E75B3B159647E07B8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OneMore/Pods-OneMore-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6747307F9C49FB7DF7E3B4EA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		DD53170AB572396059DA62D9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OneMore/Pods-OneMore-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5A429658204D022100DAF97A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A06C9782063D5A000206CB7 /* PostData.swift in Sources */,
+				5AA4E330204E8E9300160939 /* SelfWeightDataViewController.swift in Sources */,
+				5A06C9612063A16900206CB7 /* Night.swift in Sources */,
+				5A06C9752063A65900206CB7 /* Calf.swift in Sources */,
+				5AECC413204D8C2F00EF2700 /* LoginViewController.swift in Sources */,
+				5A06C9652063A42B00206CB7 /* LowerBody.swift in Sources */,
+				5A06C96D2063A59700206CB7 /* Biceps.swift in Sources */,
+				5A06C9632063A40100206CB7 /* UpperBody.swift in Sources */,
 				5A429662204D022100DAF97A /* ViewController.swift in Sources */,
+				5A06C9692063A4C300206CB7 /* Back.swift in Sources */,
+				5ABC7543204EC4AE0022BE66 /* AccountCreateViewController.swift in Sources */,
 				5A429660204D022100DAF97A /* AppDelegate.swift in Sources */,
+				5AECC415204D8C6100EF2700 /* HomeViewController.swift in Sources */,
+				5A06C9732063A63400206CB7 /* Leg.swift in Sources */,
+				5A06C96F2063A5C800206CB7 /* Triceps.swift in Sources */,
+				5A60E4652064D569006E3804 /* PostTableViewCell.swift in Sources */,
+				5AA4E332204E8EBD00160939 /* FriendViewController.swift in Sources */,
+				5AA4E334204E8EFD00160939 /* SelfManagementViewController.swift in Sources */,
+				5A5BC596208CCE000048476C /* SelfWeightPulsViewController.swift in Sources */,
+				5A1D6207208F3510007D8BB5 /* XibDateView.swift in Sources */,
+				5AECC41B204D941D00EF2700 /* SettingViewController.swift in Sources */,
+				5ABC754A20505DBC0022BE66 /* LogoutViewController.swift in Sources */,
+				5A06C9712063A5FD00206CB7 /* Sholder.swift in Sources */,
+				5AECC417204D8C8100EF2700 /* PostViewController.swift in Sources */,
+				5A06C9672063A46C00206CB7 /* Chest.swift in Sources */,
+				5A41A22F207B784F00221ECD /* Noon.swift in Sources */,
+				5A06C95F2063A14800206CB7 /* Morning.swift in Sources */,
+				5A13397B20921B3100B29064 /* AddWeight.swift in Sources */,
+				5A06C96B2063A55300206CB7 /* Abs.swift in Sources */,
+				5ABC75502053E7370022BE66 /* Const.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,13 +511,14 @@
 		};
 		5A42966F204D022100DAF97A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75612EB2A4BCAD34A6F8A39A /* Pods-OneMore.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2ATNS78ZSB;
 				INFOPLIST_FILE = OneMore/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.yusaku.ikeda.OneMore.OneMore;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.yusaku.ikeda.OneMore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -287,13 +527,14 @@
 		};
 		5A429670204D022100DAF97A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D3A5E9F46E60ED49504DE884 /* Pods-OneMore.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2ATNS78ZSB;
 				INFOPLIST_FILE = OneMore/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.yusaku.ikeda.OneMore.OneMore;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.yusaku.ikeda.OneMore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
