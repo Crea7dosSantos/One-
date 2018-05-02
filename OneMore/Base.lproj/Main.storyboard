@@ -300,6 +300,15 @@
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ida-zt-M7U" customClass="LineChartView" customModule="Charts">
                                 <rect key="frame" x="0.0" y="124" width="375" height="300"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="データが3つ以下なのでグラフを表示することが出来ません" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TzJ-VU-HY3">
+                                        <rect key="frame" x="64" y="126" width="244" height="58"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="z0f-TL-4zg"/>
@@ -343,6 +352,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="changeLabel" destination="l4f-at-n76" id="JMO-KB-wqK"/>
+                        <outlet property="chartLabel" destination="TzJ-VU-HY3" id="vJW-nK-hEe"/>
                         <outlet property="chartView" destination="Ida-zt-M7U" id="z7w-z5-lw6"/>
                         <outlet property="currentLabel" destination="nii-ZZ-HOf" id="1sC-EA-vd5"/>
                         <outlet property="startLabel" destination="lxy-yN-OHP" id="8dD-YD-4QG"/>

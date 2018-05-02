@@ -16,6 +16,7 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
   @IBOutlet weak var startLabel: UILabel!
   @IBOutlet weak var currentLabel: UILabel!
   @IBOutlet weak var changeLabel: UILabel!
+  @IBOutlet weak var chartLabel: UILabel!
   // UIViewのClassをLineChartViewに変更してChartを表示する
   @IBOutlet weak var chartView: LineChartView!
   
@@ -40,11 +41,21 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
   override func viewDidLoad() {
         super.viewDidLoad()
     
-    // 定数に配列の値を格納しておく
-    // mapを使用し、変数timeArrayにAddWeightファイルからtimeDoubleプロパティの各要素を格納する
-    timeArray = addWeightArray.map {$0.timeDouble}
-    // mapを使用し、変数weightArrayにAddWeightファイルからweightDoubleプロパティの各要素を格納する
-    weightArray = addWeightArray.map {$0.weightDouble}
+      // 定数に配列の値を格納しておく
+      // mapを使用し、変数timeArrayにAddWeightファイルからtimeDoubleプロパティの各要素を格納する
+      timeArray = addWeightArray.map {$0.timeDouble}
+      // mapを使用し、変数weightArrayにAddWeightファイルからweightDoubleプロパティの各要素を格納する
+      weightArray = addWeightArray.map {$0.weightDouble}
+    
+    // もしtimeArrayの配列の数が3以下の場合はchartViewを非表示にしchartLabelを表示させる
+    if timeArray.count < 3 {
+      chartView.isHidden = true
+      chartLabel.isEnabled = false
+      
+    } else if timeArray.count > 3 {
+      
+      chartView.isHidden = false
+      chartLabel.isEnabled = true
     
     // chartViewのxAxisのlabelCountにtimeArrayの配列の各要素の数から-1したものを格納する
     // おそらくstringForValueメソッドでtimeArrayをひとつ多く宣言しているから
@@ -57,6 +68,7 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
     chartView.xAxis.valueFormatter = self
         // Do any additional setup after loading the view.
     }
+  }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -105,6 +117,15 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
   
   // 体重管理画面が再び表示される時に呼び出される
   override func viewWillAppear(_ animated: Bool) {
+    // もしtimeArrayの配列の数が3以下の場合はchartViewを非表示にしchartLabelを表示させる
+    if timeArray.count < 3 {
+      chartView.isHidden = true
+      chartLabel.isHidden = false
+      
+    } else if timeArray.count > 3{
+      
+      chartView.isHidden = false
+      chartLabel.isHidden = true
     // 定数に配列の値を格納しておく
     // mapを使用し、timeArrayにaddWeightArrayの各要素をtimeDoubleから引き出した各要素を新しい配列timeArrayに格納する
     let timeArray: [Double] = addWeightArray.map {$0.timeDouble}
@@ -112,6 +133,7 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
    
     // setChartメソッドに値をセットする
     setChart(y: weightArray, x: timeArray)
+  }
   }
   
   
@@ -121,6 +143,9 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
     
     timeArray = addWeightArray.map {$0.timeDouble}
     
+    if timeArray.count < 3 {
+      return ""
+    }
     // dateFormatterプロパティに値を格納する
     formatter.dateFormat = "MM/dd"
     // 定数dateにtimeArrayの添字にメソッドの引数valueを格納しTimeInterval型にしたものをDate型で格納する
