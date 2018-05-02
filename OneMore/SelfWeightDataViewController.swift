@@ -26,30 +26,34 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
   let formatter = DateFormatter()
   
   // Db内のタスクが格納されるリスト
-  // 日付近い順\順でソート: 降順
   // 以降内容をアップデートするとリスト内は自動的に更新される
-  // Realmファイルで作成したAddWeightのtimeDoubleから値を全て取り出す
-  var addWeightTimeArray = try! Realm().objects(AddWeight.self).sorted(byKeyPath: "timeDouble", ascending: false)
-  // Realmファイルで作成したAddWeightのweightDoubleから値を全て取り出す
-  var addWeightWeightArray = try! Realm().objects(AddWeight.self).sorted(byKeyPath: "weightDouble", ascending: false)
- 
+  // Realmファイルで作成したAddWeightのデータを全てtimeDoubleの昇順で取り出す
+  var addWeightArray = try! Realm().objects(AddWeight.self).sorted(byKeyPath: "timeDouble", ascending: true)
+
+  // 配列で型をDouble型の値を定義しておく
   var timeArray: [Double] = []
   var weightArray: [Double] = []
+  
+  // Date型のインスタンスを生成する
   let date = Date()
   
   override func viewDidLoad() {
         super.viewDidLoad()
     
     // 定数に配列の値を格納しておく
-    // mapを使用し、timeArrayにaddWeightArrayの各要素をtimeDoubleから引き出した各要素を新しい配列timeArrayに格納する
-    timeArray = addWeightTimeArray.map {$0.timeDouble}
-    weightArray = addWeightWeightArray.map {$0.weightDouble}
+    // mapを使用し、変数timeArrayにAddWeightファイルからtimeDoubleプロパティの各要素を格納する
+    timeArray = addWeightArray.map {$0.timeDouble}
+    // mapを使用し、変数weightArrayにAddWeightファイルからweightDoubleプロパティの各要素を格納する
+    weightArray = addWeightArray.map {$0.weightDouble}
     
+    // chartViewのxAxisのlabelCountにtimeArrayの配列の各要素の数から-1したものを格納する
+    // おそらくstringForValueメソッドでtimeArrayをひとつ多く宣言しているから
     chartView.xAxis.labelCount = timeArray.count - 1
     
     // setChartメソッドに値をセットする
     setChart(y: weightArray, x: timeArray)
     
+    // chartViewのxAxisのcaluFormatterのデリゲート先をSelfWeightDataViewControllerにセットする
     chartView.xAxis.valueFormatter = self
         // Do any additional setup after loading the view.
     }
@@ -59,13 +63,13 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
         // Dispose of any resources that can be recreated.
     }
   
+  // setChartメソッドを作成しchartViewにセットする値を格納する
   func setChart(y: [Double], x: [Double]) {
     
     // x軸設定
     // chartのx軸のlabelのpositionを下に表示する
     chartView.xAxis.labelPosition = .bottom
-    // chartのx軸に表示するラベルの数を設定する
-    chartView.xAxis.labelCount = Int(6)
+    
     
     // y軸設定
     // 右軸の表示を非表示にする
@@ -77,19 +81,20 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
     // その他のUI設定
     // データがない場合の表示する文字
     chartView.noDataText = "体重を追加してください"
+    // chartViewのピンチ・ズームをさせない
     chartView.pinchZoomEnabled = false
+    // chartViewのダブルタップをさせない
     chartView.doubleTapToZoomEnabled = false
+    // chartViewのドラッグアンドドロップをさせない
     chartView.dragEnabled = false
-    
-
+  
     // 体重(y軸)を保持する配列
-    // ChartDataEntryクラスのインスタンスを作成する
+    // ChartDataEntryクラスのインスタンスを配列で作成する
     var dataentries = [ChartDataEntry]()
     
-    // enumeratedメソッドで体重の各要素にindexを与えながらループを回す
-    // valに各要素が入りその各要素にiのindexを与えている
+    // for文でxの体重の数だけchartDataEntryクラスのインスタンス変数にappendメソッドで追加する
     for i in 0..<x.count {
-      dataentries.append(ChartDataEntry(x: x[i], y: y[i]))
+      dataentries.append(ChartDataEntry(x: Double(i), y: y[i]))
     }
     // グラフをUIViewにセット
     let chartDataSet = LineChartDataSet(values: dataentries, label: "体重")
@@ -98,35 +103,34 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
   }
   
   
+  // 体重管理画面が再び表示される時に呼び出される
   override func viewWillAppear(_ animated: Bool) {
     // 定数に配列の値を格納しておく
     // mapを使用し、timeArrayにaddWeightArrayの各要素をtimeDoubleから引き出した各要素を新しい配列timeArrayに格納する
-    let timeArray: [Double] = addWeightTimeArray.map {$0.timeDouble}
-    let weightArray: [Double] = addWeightWeightArray.map {$0.weightDouble}
-    
+    let timeArray: [Double] = addWeightArray.map {$0.timeDouble}
+    let weightArray: [Double] = addWeightArray.map {$0.weightDouble}
    
-    
     // setChartメソッドに値をセットする
     setChart(y: weightArray, x: timeArray)
-    
-   
   }
   
+  
+  // stringForValueメソッドでx軸のラベルの表示を変更する
+  // valueにはデータのインデックスが入ってくる
   func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+    
+    timeArray = addWeightArray.map {$0.timeDouble}
     
     // dateFormatterプロパティに値を格納する
     formatter.dateFormat = "MM/dd"
-    let date = Date(timeIntervalSinceReferenceDate: TimeInterval(value))
+    // 定数dateにtimeArrayの添字にメソッドの引数valueを格納しTimeInterval型にしたものをDate型で格納する
+    let date = Date(timeIntervalSinceReferenceDate: TimeInterval(timeArray[Int(value)]))
     // 定数dateStringにdouble型で取得している引数valueを先ほどのformatterを使用してString型に変換する
     let dateString: String = formatter.string(from: date)
- 
- 
-    let timeArray: [Double] = addWeightTimeArray.map {$0.timeDouble}
- 
     
+     print("DEBUG_PRINT: \(dateString)")
     
-    
-        return String(timeArray[Int(value)])
+        return dateString
   
   }
   
