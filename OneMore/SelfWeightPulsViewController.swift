@@ -193,15 +193,16 @@ class SelfWeightPulsViewController: UIViewController, UIGestureRecognizerDelegat
         // ファイルAddWeightのインスタンスを作成する
         let addWeight = AddWeight()
         let addWeightArray = realm.objects(AddWeight.self)
-        /*
+        let dateString = dateButton.title(for: .normal) ?? ""
         // filterメソッドを作成し、同じ日付が存在するかを調べる
-        if addWeightArray.count != 0 {
-          try! Realm().objects(AddWeight.self).filter("time == %@", dateButton.title(for: .normal)!)
+        if 0 < realm.objects(AddWeight.self).filter("time == %@", dateString).count {
           
           return
+            
            SVProgressHUD.showError(withStatus: "既にこの日の体重は入力されています")
+          
         } else {
-    */
+    
         // もしもaddWeightArrayのcountプロパティが0じゃなかったら
         if addWeightArray.count != 0 {
           // idに+1をして新しいidを作成して保存する
@@ -250,7 +251,7 @@ class SelfWeightPulsViewController: UIViewController, UIGestureRecognizerDelegat
        }
       }
      }
-  
+    }
   
   
   
