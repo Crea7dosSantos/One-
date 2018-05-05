@@ -34,7 +34,7 @@ class AccountCreateViewController: UIViewController {
         if let error = error {
           // エラーがあったら原因をprintして、returnすることで以降の処理を実行せずに処理を終了する
           print("DEBUG_PRINT: " + error.localizedDescription)
-          SVProgressHUD.showError(withStatus: "ユーザー作成に成功しました。")
+          SVProgressHUD.showError(withStatus: "ユーザー作成に失敗しました。")
           return
         }
         print("DEBUG_PRINT: ユーザー作成に成功しました。")
@@ -54,8 +54,10 @@ class AccountCreateViewController: UIViewController {
             // HUDを消す
             SVProgressHUD.dismiss()
             
-            let ViewController = self.storyboard?.instantiateViewController(withIdentifier: "View")
-            self.present(ViewController!, animated: true, completion: nil)
+            // let ViewController = self.storyboard?.instantiateViewController(withIdentifier: "View")
+            // self.present(ViewController!, animated: true, completion: nil)
+            
+            self.dismiss(animated: true, completion: nil)
           }
         } else {
           print("DEBUG_PRINT: displayNameの設定に失敗しました。")

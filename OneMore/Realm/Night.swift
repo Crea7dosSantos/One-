@@ -27,9 +27,7 @@ class Night: Object {
   // date
   @objc dynamic var time = ""
   
-  // 公開、非公開タグ
-  @objc dynamic var privateSwitch: Bool = true
-  
+ 
   override static func primaryKey() -> String? {
     return "id"
   }

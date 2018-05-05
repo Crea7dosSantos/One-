@@ -12,12 +12,12 @@ import FirebaseDatabase
 import SVProgressHUD
 import RealmSwift
 
-class PostViewController: UIViewController {
+class PostViewController: UIViewController, UITextViewDelegate {
   var image: UIImage!
 
   @IBOutlet weak var imageView: UIImageView!
-  @IBOutlet weak var textField: UITextField!
-  @IBOutlet weak var privateSwitch: UISwitch!
+  @IBOutlet weak var textField: UITextView!
+  @IBOutlet weak var hiddenLabel: UILabel!
   @IBOutlet weak var morningSwitch: UISwitch!
   @IBOutlet weak var noonSwitch: UISwitch!
   @IBOutlet weak var nightSwitch: UISwitch!
@@ -89,7 +89,6 @@ class PostViewController: UIViewController {
         morning.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         morning.time = String(timer)
-        morning.privateSwitch = self.privateSwitch.isOn
         realm.add(morning, update: true)
       }
     }
@@ -111,7 +110,6 @@ class PostViewController: UIViewController {
         noon.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         noon.time = String(timer)
-        noon.privateSwitch = privateSwitch.isOn
         realm.add(noon, update: true)
       }
     }
@@ -133,7 +131,6 @@ class PostViewController: UIViewController {
         night.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         night.time = String(timer)
-        night.privateSwitch = privateSwitch.isOn
         realm.add(night, update: true)
       }
     }
@@ -155,7 +152,6 @@ class PostViewController: UIViewController {
         upperBody.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         upperBody.time = String(timer)
-        upperBody.privateSwitch = privateSwitch.isOn
         realm.add(upperBody, update: true)
       }
     }
@@ -177,7 +173,6 @@ class PostViewController: UIViewController {
         lowerBody.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         lowerBody.time = String(timer)
-        lowerBody.privateSwitch = privateSwitch.isOn
         realm.add(lowerBody, update: true)
       }
     }
@@ -199,7 +194,6 @@ class PostViewController: UIViewController {
         chest.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         chest.time = String(timer)
-        chest.privateSwitch = privateSwitch.isOn
         realm.add(chest, update: true)
       }
     }
@@ -221,7 +215,6 @@ class PostViewController: UIViewController {
         back.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         back.time = String(timer)
-        back.privateSwitch = privateSwitch.isOn
         realm.add(back, update: true)
       }
     }
@@ -243,7 +236,6 @@ class PostViewController: UIViewController {
         abs.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         abs.time = String(timer)
-        abs.privateSwitch = privateSwitch.isOn
         realm.add(abs, update: true)
       }
     }
@@ -265,7 +257,6 @@ class PostViewController: UIViewController {
         biceps.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         biceps.time = String(timer)
-        biceps.privateSwitch = privateSwitch.isOn
         realm.add(biceps, update: true)
       }
     }
@@ -287,7 +278,6 @@ class PostViewController: UIViewController {
         triceps.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         triceps.time = String(timer)
-        triceps.privateSwitch = privateSwitch.isOn
         realm.add(triceps, update: true)
       }
     }
@@ -309,7 +299,6 @@ class PostViewController: UIViewController {
         sholder.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         sholder.time = String(timer)
-        sholder.privateSwitch = privateSwitch.isOn
         realm.add(sholder, update: true)
       }
     }
@@ -331,7 +320,6 @@ class PostViewController: UIViewController {
         leg.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         leg.time = String(timer)
-        leg.privateSwitch = privateSwitch.isOn
         realm.add(leg, update: true)
       }
     }
@@ -353,7 +341,6 @@ class PostViewController: UIViewController {
         calf.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         calf.time = String(timer)
-        calf.privateSwitch = privateSwitch.isOn
         realm.add(calf, update: true)
       }
     }
@@ -369,11 +356,15 @@ class PostViewController: UIViewController {
   // 一番最初にこの画面が呼ばれた時に呼び出される
   override func viewDidLoad() {
         super.viewDidLoad()
+    
+    textField.delegate = self
+    
+    // textFieldの枠線を無しにする
+    // textField.borderStyle = UITextBorderStyle.none
     // ViewControllerから受け取った画像をImgaViewに設定する
     imageView.image = image
     
     // 全てのSwitchを最初の時点ではOffにしておく
-    privateSwitch.isOn = false
     morningSwitch.isOn = false
     noonSwitch.isOn = false
     nightSwitch.isOn = false
@@ -413,7 +404,23 @@ class PostViewController: UIViewController {
     // キーボードを閉じる
     view.endEditing(true)
   }
+ 
+  // textViewがフォーカスされたら、Labelを非表示にする
+  func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+    hiddenLabel.isHidden = true
+    return true
+  }
+  
+  // textViewからフォーカスが外れて、TextViewが空だったらlabelを再表示する
+  func textViewDidEndEditing(_ textView: UITextView) {
     
+    // もしtextFieldの値がisEnptyならlabelを表示する
+    if let text = textField.text {
+      if text.isEmpty {
+        hiddenLabel.isHidden = false
+      }
+    }
+  }
 
     /*
     // MARK: - Navigation

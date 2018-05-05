@@ -41,6 +41,7 @@
 		5AA4E330204E8E9300160939 /* SelfWeightDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA4E32F204E8E9300160939 /* SelfWeightDataViewController.swift */; };
 		5AA4E332204E8EBD00160939 /* FriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA4E331204E8EBD00160939 /* FriendViewController.swift */; };
 		5AA4E334204E8EFD00160939 /* SelfManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA4E333204E8EFD00160939 /* SelfManagementViewController.swift */; };
+		5AB3DDFF209A489000611ED5 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB3DDFE209A489000611ED5 /* Search.swift */; };
 		5ABC7541204EA16E0022BE66 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5ABC7540204EA16E0022BE66 /* GoogleService-Info.plist */; };
 		5ABC7543204EC4AE0022BE66 /* AccountCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABC7542204EC4AE0022BE66 /* AccountCreateViewController.swift */; };
 		5ABC7548205054900022BE66 /* button-back.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABC7547205054900022BE66 /* button-back.png */; };
@@ -89,6 +90,7 @@
 		5AA4E32F204E8E9300160939 /* SelfWeightDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfWeightDataViewController.swift; sourceTree = "<group>"; };
 		5AA4E331204E8EBD00160939 /* FriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewController.swift; sourceTree = "<group>"; };
 		5AA4E333204E8EFD00160939 /* SelfManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfManagementViewController.swift; sourceTree = "<group>"; };
+		5AB3DDFE209A489000611ED5 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		5ABC7540204EA16E0022BE66 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5ABC7542204EC4AE0022BE66 /* AccountCreateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreateViewController.swift; sourceTree = "<group>"; };
 		5ABC7547205054900022BE66 /* button-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-back.png"; sourceTree = "<group>"; };
@@ -144,9 +146,9 @@
 				5AECC416204D8C8100EF2700 /* PostViewController.swift */,
 				5AECC41A204D941D00EF2700 /* SettingViewController.swift */,
 				5AA4E32F204E8E9300160939 /* SelfWeightDataViewController.swift */,
+				5A5BC595208CCE000048476C /* SelfWeightPulsViewController.swift */,
 				5AA4E331204E8EBD00160939 /* FriendViewController.swift */,
 				5AA4E333204E8EFD00160939 /* SelfManagementViewController.swift */,
-				5A5BC595208CCE000048476C /* SelfWeightPulsViewController.swift */,
 				5A60E4632064D569006E3804 /* PostTableViewCell.swift */,
 				5A1D6206208F3510007D8BB5 /* XibDateView.swift */,
 				5A42966B204D022100DAF97A /* Info.plist */,
@@ -157,6 +159,7 @@
 				5A429668204D022100DAF97A /* LaunchScreen.storyboard */,
 				5ABC7540204EA16E0022BE66 /* GoogleService-Info.plist */,
 				5ABC754F2053E7370022BE66 /* Const.swift */,
+				5AB3DDFE209A489000611ED5 /* Search.swift */,
 				5A06C9772063D5A000206CB7 /* PostData.swift */,
 				5AA859B12063D7AF00ADEB1C /* Realm */,
 				5ABC7544205053500022BE66 /* Resources */,
@@ -362,6 +365,7 @@
 				5AECC415204D8C6100EF2700 /* HomeViewController.swift in Sources */,
 				5A06C9732063A63400206CB7 /* Leg.swift in Sources */,
 				5A06C96F2063A5C800206CB7 /* Triceps.swift in Sources */,
+				5AB3DDFF209A489000611ED5 /* Search.swift in Sources */,
 				5A60E4652064D569006E3804 /* PostTableViewCell.swift in Sources */,
 				5AA4E332204E8EBD00160939 /* FriendViewController.swift in Sources */,
 				5AA4E334204E8EFD00160939 /* SelfManagementViewController.swift in Sources */,

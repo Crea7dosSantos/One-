@@ -22,6 +22,9 @@ class SelfWeightPulsViewController: UIViewController, UIGestureRecognizerDelegat
   // このインスタンスを使用し読み書きのメソッドを呼び出す
   let realm = try! Realm()
   
+  // SelfWeightDataViewControllerからデータを受け取る
+  var addWeight: AddWeight!
+  
   // XibDateViewクラスの型を宣言する
   var xib: XibDateView!
   
@@ -37,6 +40,14 @@ class SelfWeightPulsViewController: UIViewController, UIGestureRecognizerDelegat
   
     override func viewDidLoad() {
         super.viewDidLoad()
+      
+      // SelfWeightDataViewControllerでセルがタップされた時にSelfWeightPlusViewControllerでタップされたCellの情報を格納する
+      saveCode.text = addWeight.weight
+      self.dateButton.setTitle(addWeight.time, for: .normal)
+      
+      // 文字数制限をかけるテキストフィールドを監視対象にする
+      NotificationCenter.default.addObserver(self, selector:  #selector(textFieldDidChange), name: NSNotification.Name.UITextFieldTextDidChange, object: saveCode)
+      
       // navgationBarのプロパティを変更する
       // rightButtonItemを指定して、プロパティを変更する
       navigationItem.rightBarButtonItem = UIBarButtonItem(title: "追加",
@@ -81,7 +92,7 @@ class SelfWeightPulsViewController: UIViewController, UIGestureRecognizerDelegat
       
       dateView.layer.addSublayer(dateBorder)
       
-      
+      /*
       // Dateformatterクラスのインスタンスを作成する
       let formatter = DateFormatter()
       // dateFormatterプロパティに値を格納する
@@ -95,12 +106,13 @@ class SelfWeightPulsViewController: UIViewController, UIGestureRecognizerDelegat
       
       // dateButtonのtitleに現在の日付を表示させる
       dateButton.setTitle(dateString, for: .normal)
+ */
       // dateLabelのテキストをタップ出来るとユーザーにわかりやすくする為に青文字で表示させる
       self.dateButton.setTitleColor(UIColor.blue, for: .normal)
       
 
       // SaveCodeから入力される文字は数字だけにする
-      self.saveCode.keyboardType = UIKeyboardType.numberPad
+      self.saveCode.keyboardType = UIKeyboardType.decimalPad
       // TextFieldの枠線を非表示にする
       self.saveCode.borderStyle = UITextBorderStyle.none
 
@@ -252,6 +264,19 @@ class SelfWeightPulsViewController: UIViewController, UIGestureRecognizerDelegat
       }
      }
     }
+  
+  // テキストフィールドの入力イベントを監視し、変更があった場合に指定文字数(ここでは4文字)を超えた文字の入力をさせない
+  @objc func textFieldDidChange(notification: NSNotification) {
+    let textField = notification.object as! UITextField
+    guard let text = textField.text else {
+      return
+    }
+    guard let intText = Double(text) else { textField.text = ""; return }
+    if intText > 4 {
+      saveCode.text = String(text.prefix(4))
+    }
+  }
+  
   
   
   
