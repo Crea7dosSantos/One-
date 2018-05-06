@@ -22,10 +22,10 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
   @IBOutlet weak var profielImageSetting: UIImageView!
   @IBOutlet weak var handleChangerButton: UIButton!
   @IBOutlet weak var textView: UITextView!
-  
+  @IBOutlet weak var selfNoteButton: UIButton!
   //DB参照作成
   // OneMoreのDatabase上にChildメソッドで値を格納するGoalDreamを作成する
-  var searchRef = Database.database().reference().child(Goal.Setting)
+  var goalRef = Database.database().reference().child(Goal.Setting)
   
   let user = Auth.auth().currentUser
   
@@ -118,8 +118,17 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
       // デリゲートをセットする
       tapGesture.delegate = self
       
+      // 背景をタップしたらdismissKeyboardメソッドを呼び出す
+      let tapGesture2: UITapGestureRecognizer = UITapGestureRecognizer(target: self,action: #selector(dismissKeyboard))
+      self.view.addGestureRecognizer(tapGesture2)
+      
         // Do any additional setup after loading the view.
     }
+  
+  @objc func dismissKeyboard() {
+    // キーボードを閉じる
+    view.endEditing(true)
+  }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -258,6 +267,11 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
     picker.dismiss(animated:  true, completion: nil)
   }
   
+  
+  @IBAction func selfNoteButtonAction(_ sender: Any) {
+    let goalData = ["success": textView.text!]
+    goalRef.childByAutoId().setValue(goalData)
+  }
   
 
     

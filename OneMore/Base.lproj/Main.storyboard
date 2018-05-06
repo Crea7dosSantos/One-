@@ -1168,6 +1168,9 @@
                                 <state key="normal" title="SelfNoteの変更を保存する">
                                     <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="selfNoteButtonAction:" destination="Vl9-wr-yg7" eventType="touchUpInside" id="cJv-sc-VCm"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1197,6 +1200,7 @@
                         <outlet property="handleChangerButton" destination="frO-uU-3II" id="sPd-pt-fuX"/>
                         <outlet property="profielImageSetting" destination="7XV-i3-sUF" id="lYA-fN-Erw"/>
                         <outlet property="profielView" destination="Jbt-xV-6Sh" id="Qnb-R0-Xf7"/>
+                        <outlet property="selfNoteButton" destination="K55-bd-5dA" id="XtR-PG-I8Y"/>
                         <outlet property="textView" destination="Pd6-Np-e37" id="U1J-sJ-LbQ"/>
                     </connections>
                 </viewController>
