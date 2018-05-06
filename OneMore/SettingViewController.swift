@@ -17,9 +17,18 @@ import SDWebImage
 
 
 class SettingViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
+  @IBOutlet weak var profielView: UIView!
   @IBOutlet weak var displayNameTextField: UITextField!
   @IBOutlet weak var profielImageSetting: UIImageView!
   @IBOutlet weak var handleChangerButton: UIButton!
+  @IBOutlet weak var textView: UITextView!
+  
+  //DB参照作成
+  // OneMoreのDatabase上にChildメソッドで値を格納するGoalDreamを作成する
+  var searchRef = Database.database().reference().child(Goal.Setting)
+  
+  let user = Auth.auth().currentUser
+  
   
   @IBAction func handleChangeButton(_ sender: Any) {
     if let displayName = displayNameTextField.text {
@@ -66,9 +75,6 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
       
-      // 現在ログインしているユーザーの情報を取得する
-      let user = Auth.auth().currentUser
-      
       // もしユーザーのphotoURLが無ければデフォルトを設定する
       if user?.photoURL == nil {
         // もしプロフィール写真が設定されていなかったらデフォルトを設定する
@@ -78,6 +84,13 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
         profielImageSetting.sd_setImage(with: user?.photoURL)
         
       }
+      
+      // profielViewに下線を表示する
+      let weightBorder = CALayer()
+      weightBorder.frame = CGRect(x: 0, y: profielView.frame.height, width: profielView.frame.width, height: 1.0)
+      weightBorder.backgroundColor = UIColor.lightGray.cgColor
+      // Viewに追加する
+      profielView.layer.addSublayer(weightBorder)
       
       // ImageViewの枠線を適用する
       self.profielImageSetting.layer.borderColor = UIColor.black.cgColor

@@ -92,21 +92,6 @@ class SelfWeightPulsViewController: UIViewController, UIGestureRecognizerDelegat
       
       dateView.layer.addSublayer(dateBorder)
       
-      /*
-      // Dateformatterクラスのインスタンスを作成する
-      let formatter = DateFormatter()
-      // dateFormatterプロパティに値を格納する
-      formatter.dateFormat = "yyyy年MM月dd日"
-      
-      // 定数dateにTimeIntervalのクラスのインスタンスを作成し、定数timeに格納された現在の日付をTimeInterval型の値に変換する
-      let date = Date(timeIntervalSinceReferenceDate: TimeInterval(time))
-      
-      // 定数dateStringにdateに格納された値をString型の値に変換して格納する
-      let dateString = formatter.string(from: date)
-      
-      // dateButtonのtitleに現在の日付を表示させる
-      dateButton.setTitle(dateString, for: .normal)
- */
       // dateLabelのテキストをタップ出来るとユーザーにわかりやすくする為に青文字で表示させる
       self.dateButton.setTitleColor(UIColor.blue, for: .normal)
       

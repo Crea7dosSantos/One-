@@ -52,6 +52,15 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
   override func viewDidLoad() {
         super.viewDidLoad()
     
+    // weightViewに下線を表示する
+    let weightBorder = CALayer()
+    // weightBorderのframeプロパティを設定する。xの値は0、yはweightViewの高さを指定、widthはweightViewの幅を選択、heightは1.0。
+    weightBorder.frame = CGRect(x: 0, y: weightView.frame.height, width: weightView.frame.width, height: 1.0)
+    weightBorder.backgroundColor = UIColor.lightGray.cgColor
+    
+    // weightViewにweightBorderを追加する
+    weightView.layer.addSublayer(weightBorder)
+    
     // Realmから全てのデータを取り出す
     let addWeights = realm.objects(AddWeight.self).sorted(byKeyPath: "time", ascending: true)
     
@@ -190,6 +199,8 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
       currentWeightLabel.text = startWeightString
       differenceWeightLabel.text = nil
       
+      tableView.reloadData()
+      
       // addweightsの配列の数が2以上の時
     } else if addWeights.count > 1 {
       
@@ -257,6 +268,7 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
     // setChartメソッドに値をセットする
     setChart(y: weightArray, x: timeArray)
   }
+    tableView.reloadData()
  }
   
   
@@ -296,10 +308,15 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
     // Cellに値を設定する
     // Cellの値にindexPathでアクセスし設定する
     let addWeight = addWeightArraies[indexPath.row]
+    
+    if addWeightArrays.count < 1 {
+      cell.textLabel?.text = nil
+      cell.detailTextLabel?.text = nil
+    } else if addWeightArrays.count > 0 {
     cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
     cell.textLabel?.text = addWeight.weight
     cell.detailTextLabel?.text = addWeight.time
-    
+    }
     return cell
   }
   
@@ -345,17 +362,10 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
         }
           
         setChart(y: weightArray, x: timeArray)
+      
           
           // Realmから全てのデータを取り出す
-          let addWeights = realm.objects(AddWeight.self).sorted(byKeyPath: "time", ascending: true)
-        
-        let startWeight = addWeights.first
-        
-        let startWeights = startWeight!.weightDouble
-        
-        print("DEBUG_PRINT: startWeights: \(String(describing: startWeights))")
-        
-        let startWeightString: String = String("\(startWeights)")
+        let addWeights = realm.objects(AddWeight.self).sorted(byKeyPath: "time", ascending: true)
         
           print("Test: \(addWeights)")
           
@@ -365,6 +375,7 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
             startWeightLabel.text = nil
             currentWeightLabel.text = nil
             differenceWeightLabel.text = nil
+            
             
             // もしaddweightsの配列の数が1なら
           } else if addWeights.count == 1 {
@@ -383,7 +394,11 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
             differenceWeightLabel.text = nil
             
             // addweightsの配列の数が2以上の時
-          } else if addWeights.count <= 2 {
+          } else if addWeights.count >= 2 {
+            
+            let startWeight = addWeights.first
+            
+            let startWeights = startWeight!.weightDouble
             
             let lastWeight = addWeights.last
             
@@ -391,6 +406,7 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
             
             print("DEBUG_PRINT: lastWeights: \(String(describing: lastWeights))")
             
+            let startWeightString: String = String("\(startWeights)")
             let lastWeightString: String = String("\(lastWeights)")
             
             startWeightLabel.text = startWeightString
@@ -421,6 +437,7 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
         }
         tableView.reloadData()
         }
+      tableView.reloadData()
       }
     }
   
@@ -460,7 +477,7 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
     
   }
   
-  }
+}
 
   
   

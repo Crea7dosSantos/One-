@@ -57,7 +57,8 @@ class AccountCreateViewController: UIViewController {
             // let ViewController = self.storyboard?.instantiateViewController(withIdentifier: "View")
             // self.present(ViewController!, animated: true, completion: nil)
             
-            self.dismiss(animated: true, completion: nil)
+            UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+           
           }
         } else {
           print("DEBUG_PRINT: displayNameの設定に失敗しました。")

@@ -67,6 +67,10 @@ class PostViewController: UIViewController, UITextViewDelegate {
     // この時、画像選択画面、画像加工画面、この投稿画面と、3つの画面がモーダルで画面遷移しているため、全てを閉じる必要が出てきます。以下の記述で全てのモーダルを閉じて先頭の画面に戻ることができる。
     UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
     
+    let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "Management") as! UINavigationController
+    
+    self.present(navigationController, animated: true, completion: nil)
+    
     // 投稿ボタンをタップした時に各Switchの状態を保存し、各Switchがtrueの状態の時に各Realmファイルに保存をする
     
     // Date.timeIntervalSinceReferenceDateメソッドだけを取り出し、コードの量を減らす
