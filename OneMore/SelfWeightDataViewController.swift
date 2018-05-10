@@ -228,7 +228,7 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
       } else if startWeights < lastWeights {
         let differenceWeights = lastWeights - startWeights
         let differenceWeightString: String = String("+\(differenceWeights))")
-        
+    
         let differenceString = String(differenceWeightString.prefix(4))
         
         differenceWeightLabel.text = differenceString

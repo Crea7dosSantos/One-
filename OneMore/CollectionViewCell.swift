@@ -10,7 +10,7 @@ import UIKit
 
 class CollectionViewCell: UICollectionViewCell {
   @IBOutlet weak var imageView: UIImageView!
-  
+ 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -18,6 +18,7 @@ class CollectionViewCell: UICollectionViewCell {
   
   func setPostData(_ postData: PostData) {
     self.imageView.image = postData.image
+    
     print("DBUG_PRINT_CELL: \(String(describing: imageView.image))")
     
   }

@@ -353,7 +353,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
   
   @IBAction func handleCancelButton(_ sender: Any) {
     // 画面を閉じる
-    dismiss(animated: true, completion: nil)
+    self.dismiss(animated: true, completion: nil)
   }
   
   

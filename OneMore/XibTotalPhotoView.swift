@@ -28,10 +28,6 @@ class XibTotalPhotoView: UIView {
   }
   
   override func awakeFromNib() {
-    
-    let nib = UINib(nibName: "CollectionViewCell", bundle: nil)
-    totalCollectionView.register(nib, forCellWithReuseIdentifier: "Cell")
-    
   }
   
     /*

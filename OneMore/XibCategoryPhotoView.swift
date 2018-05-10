@@ -9,6 +9,21 @@
 import UIKit
 
 class XibCategoryPhotoView: UIView {
+  @IBOutlet weak var timeView: UIView!
+  @IBOutlet weak var muscleView: UIView!
+  @IBOutlet weak var morningButton: UIButton!
+  @IBOutlet weak var noonButton: UIButton!
+  @IBOutlet weak var nightButton: UIButton!
+  @IBOutlet weak var upperBodyButton: UIButton!
+  @IBOutlet weak var lowerBodyButton: UIButton!
+  @IBOutlet weak var chestButton: UIButton!
+  @IBOutlet weak var backButton: UIButton!
+  @IBOutlet weak var absButton: UIButton!
+  @IBOutlet weak var bicepsButton: UIButton!
+  @IBOutlet weak var tricepsButton: UIButton!
+  @IBOutlet weak var sholderButton: UIButton!
+  @IBOutlet weak var legButton: UIButton!
+  @IBOutlet weak var calfButton: UIButton!
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -25,6 +40,10 @@ class XibCategoryPhotoView: UIView {
     view.frame = self.bounds
     self.addSubview(view)
   }
+  
+  override func awakeFromNib() {
+  }
+  
   
     /*
     // Only override draw() if you perform custom drawing.

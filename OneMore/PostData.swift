@@ -21,19 +21,6 @@ class PostData: NSObject {
   var likes: [String] = []
   var isLiked: Bool = false
   var commentList: [String] = []
-  var morning: Bool?
-  var noon: Bool?
-  var night: Bool?
-  var upperBody: Bool?
-  var lowerBody: Bool?
-  var chest: Bool?
-  var back: Bool?
-  var abs: Bool?
-  var biceps: Bool?
-  var triceps: Bool?
-  var sholder: Bool?
-  var leg: Bool?
-  var calf: Bool?
   
   // Firebaseはデータの追加や更新があるとDataSnapshotクラスのデータが渡される。keyプロパティがこの要素自身のIDとなる。そしてvalueプロパティにデータが入っている。valueプロパティはキーと値の組み合わせで、辞書型となっている。キーはStringなので、valueDictionary["name"]などで値を取り出す。
   init(snapshot: DataSnapshot, myId: String) {
