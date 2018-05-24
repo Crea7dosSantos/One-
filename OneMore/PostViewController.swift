@@ -30,7 +30,11 @@ class PostViewController: UIViewController, UITextViewDelegate {
   @IBOutlet weak var tricepsSwitch: UISwitch!
   @IBOutlet weak var sholderSwitch: UISwitch!
   @IBOutlet weak var legSwitch: UISwitch!
+  @IBOutlet weak var footSwitch: UISwitch!
+  @IBOutlet weak var assSwitch: UISwitch!
   @IBOutlet weak var calfSwitch: UISwitch!
+  @IBOutlet weak var timeBorderView: UIView!
+  @IBOutlet weak var muscleBorderView: UIView!
   
   // Realmのインスタンスを作成する
   // このインスタンスを使用し読み書きのメソッドを呼び出す
@@ -76,10 +80,27 @@ class PostViewController: UIViewController, UITextViewDelegate {
     // Date.timeIntervalSinceReferenceDateメソッドだけを取り出し、コードの量を減らす
     let timer = Date.timeIntervalSinceReferenceDate
     
+    // Allファイルにデータを保存する
+    let all = All()
+    
+    let allArray = realm.objects(All.self)
+    // もしもallArrayのcountプロパティが0じゃなかったら
+    if allArray.count != 0 {
+      all.id = allArray.max(ofProperty: "id")! + 1
+    }
+    try! realm.write {
+      // 投稿された全てのデータをこのAllに保存する
+      all.caption = self.textField.text!
+      all.userName = (Auth.auth().currentUser?.displayName!)!
+      all.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+      // 日付の値を取得する
+      all.time = String(timer)
+      realm.add(all, update: true)
+    }
+    
     // もしもMorningSwitchがtrueだったら
     if morningSwitch.isOn == true {
       let morning = Morning()
-      morning.time = String(timer)
 
       let morningArray = realm.objects(Morning.self)
       // もしもmorningArrayのcountプロパティが0じゃなかったら
@@ -92,7 +113,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         morning.userName = (Auth.auth().currentUser?.displayName!)!
         morning.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
-        morning.time = String(timer)
+        morning.time = Date()
         realm.add(morning, update: true)
       }
     }
@@ -100,7 +121,6 @@ class PostViewController: UIViewController, UITextViewDelegate {
     // もしもNoonSwitchがtrueだったら
     if noonSwitch.isOn == true {
       let noon = Noon()
-      noon.time = String(timer)
   
       let noonArray = realm.objects(Noon.self)
       // もしもnoonArrayのcountプロパティが0じゃなかったら
@@ -113,7 +133,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         noon.userName = (Auth.auth().currentUser?.displayName!)!
         noon.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
-        noon.time = String(timer)
+        noon.time = Date()
         realm.add(noon, update: true)
       }
     }
@@ -121,7 +141,6 @@ class PostViewController: UIViewController, UITextViewDelegate {
     // もしもNightSwitchがtrueだったら
     if nightSwitch.isOn == true {
       let night = Night()
-      night.time = String(timer)
       
       let nightArray = realm.objects(Night.self)
       // もしもnightArrayのcountプロパティが0じゃなかったら
@@ -134,7 +153,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         night.userName = (Auth.auth().currentUser?.displayName!)!
         night.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
-        night.time = String(timer)
+        night.time = Date()
         realm.add(night, update: true)
       }
     }
@@ -142,7 +161,6 @@ class PostViewController: UIViewController, UITextViewDelegate {
     // もしもupperBodySwitchがtrueだったら
     if upperBodySwitch.isOn == true {
       let upperBody = UpperBody()
-      upperBody.time = String(timer)
       
       let upperBodyArray = realm.objects(UpperBody.self)
       // もしもupperBodyのcountプロパティが0じゃなかったら
@@ -155,15 +173,14 @@ class PostViewController: UIViewController, UITextViewDelegate {
         upperBody.userName = (Auth.auth().currentUser?.displayName!)!
         upperBody.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
-        upperBody.time = String(timer)
+        upperBody.time = Date()
         realm.add(upperBody, update: true)
       }
     }
     
     // もしもlowerBodySwitchがtrueだったら
     if lowerBodySwitch.isOn == true {
-      let lowerBody = UpperBody()
-      lowerBody.time = String(timer)
+      let lowerBody = LowerBody()
       
       let LowerBodyArray = realm.objects(LowerBody.self)
       // もしもlowerBodyのcountプロパティが0じゃなかったら
@@ -176,7 +193,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         lowerBody.userName = (Auth.auth().currentUser?.displayName!)!
         lowerBody.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
-        lowerBody.time = String(timer)
+        lowerBody.time = Date()
         realm.add(lowerBody, update: true)
       }
     }
@@ -184,7 +201,6 @@ class PostViewController: UIViewController, UITextViewDelegate {
     // もしもchestSwitchがtrueだったら
     if chestSwitch.isOn == true {
       let chest = Chest()
-      chest.time = String(timer)
       
       let chestArray = realm.objects(Chest.self)
       // もしもchestArrayのCountプロパティが0じゃなかったら
@@ -197,7 +213,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         chest.userName = (Auth.auth().currentUser?.displayName!)!
         chest.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
-        chest.time = String(timer)
+        chest.time = Date()
         realm.add(chest, update: true)
       }
     }
@@ -205,7 +221,6 @@ class PostViewController: UIViewController, UITextViewDelegate {
     // もしもbackSwitchがtrueだったら
     if backSwitch.isOn == true {
       let back = Back()
-      back.time = String(timer)
       
       let backArray = realm.objects(Back.self)
       // もしもBackArrayのCountプロパティが0じゃなかったら
@@ -218,7 +233,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         back.userName = (Auth.auth().currentUser?.displayName!)!
         back.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
-        back.time = String(timer)
+        back.time = Date()
         realm.add(back, update: true)
       }
     }
@@ -226,7 +241,6 @@ class PostViewController: UIViewController, UITextViewDelegate {
     // もしもabsSwitchがtrueだったら
     if absSwitch.isOn == true {
       let abs = Abs()
-      abs.time = String(timer)
       
       let absArray = realm.objects(Abs.self)
       // もしもabsArraryのcountプロパティが0じゃなかったら
@@ -239,7 +253,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         abs.userName = (Auth.auth().currentUser?.displayName!)!
         abs.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
-        abs.time = String(timer)
+        abs.time = Date()
         realm.add(abs, update: true)
       }
     }
@@ -247,7 +261,6 @@ class PostViewController: UIViewController, UITextViewDelegate {
     // もしもbicepsSwitchがtrueだったら
     if bicepsSwitch.isOn == true {
       let biceps = Biceps()
-      biceps.time = String(timer)
       
       let bicepsArray = realm.objects(Biceps.self)
       // もしもbicepsArrayのcountプロパティがじゃなかったら
@@ -260,7 +273,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         biceps.userName = (Auth.auth().currentUser?.displayName!)!
         biceps.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
-        biceps.time = String(timer)
+        biceps.time = Date()
         realm.add(biceps, update: true)
       }
     }
@@ -268,7 +281,6 @@ class PostViewController: UIViewController, UITextViewDelegate {
     // もしもtricepsSwitchがtrueだったら
     if tricepsSwitch.isOn == true {
       let triceps = Triceps()
-      triceps.time = String(timer)
       
       let tricepsArray = realm.objects(Triceps.self)
       // もしもTricepsArrayのcountプロパティが0じゃなかったら
@@ -281,7 +293,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         triceps.userName = (Auth.auth().currentUser?.displayName!)!
         triceps.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
-        triceps.time = String(timer)
+        triceps.time = Date()
         realm.add(triceps, update: true)
       }
     }
@@ -289,7 +301,6 @@ class PostViewController: UIViewController, UITextViewDelegate {
     // もしもsholderSwitchがtrueだったら
     if sholderSwitch.isOn == true {
       let sholder = Sholder()
-      sholder.time = String(timer)
       
       let sholderArray = realm.objects(Sholder.self)
       // もしもsholderArrayのcountプロパティが0じゃなかったら
@@ -302,7 +313,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
         sholder.userName = (Auth.auth().currentUser?.displayName!)!
         sholder.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
-        sholder.time = String(timer)
+        sholder.time = Date()
         realm.add(sholder, update: true)
       }
     }
@@ -310,7 +321,6 @@ class PostViewController: UIViewController, UITextViewDelegate {
     // もしもlegSwitchがtrueだったら
     if legSwitch.isOn == true {
       let leg = Leg()
-      leg.time = String(timer)
       
       let legArray = realm.objects(Leg.self)
       // もしもlegArrayのcountプロパティが0じゃなかったら
@@ -323,15 +333,54 @@ class PostViewController: UIViewController, UITextViewDelegate {
         leg.userName = (Auth.auth().currentUser?.displayName!)!
         leg.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
-        leg.time = String(timer)
+        leg.time = Date()
         realm.add(leg, update: true)
+      }
+    }
+    
+    // もしもfootSwitchがtrueだったら
+    if footSwitch.isOn == true {
+      let foot = Foot()
+      
+      let footArray = realm.objects(Foot.self)
+      // もしもfootArrayのcountプロパティが0じゃなかったら
+      if footArray.count != 0 {
+        foot.id = footArray.max(ofProperty: "id")! + 1
+      }
+      try! realm.write {
+        foot.caption = self.textField.text!
+        foot.UserName =
+        (Auth.auth().currentUser?.displayName!)!
+        foot.ImageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+        // 日付の値を取得する
+        foot.time = Date()
+        realm.add(foot, update: true)
+      }
+    }
+    
+    // もしもassSwitchがtrueだったら
+    if assSwitch.isOn == true {
+      let ass = Ass()
+      
+      let assArray = realm.objects(Ass.self)
+      // もしもassArrayのcountプロパティが0じゃなかったら
+      if assArray.count != 0 {
+        ass.id = assArray.max(ofProperty: "id")! + 1
+      }
+      try! realm.write {
+        // タグassに投稿情報が保存される時
+        ass.caption = self.textField.text!
+        ass.userName = (Auth.auth().currentUser?.displayName!)!
+        ass.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+        // 日付の値を取得する
+        ass.time = Date()
+        realm.add(ass, update: true)
       }
     }
     
     // もしもcalfSwitchがtrueだったら
     if calfSwitch.isOn == true {
       let calf = Calf()
-      calf.time = String(timer)
       
       let calfArray = realm.objects(Calf.self)
       // もしもcalfArrayのcountプロパティが0じゃなかったら
@@ -344,13 +393,13 @@ class PostViewController: UIViewController, UITextViewDelegate {
         calf.userName = (Auth.auth().currentUser?.displayName!)!
         calf.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
-        calf.time = String(timer)
+        calf.time = Date()
         realm.add(calf, update: true)
       }
     }
   }
   
-  
+  // キャンセルボタンをタップした時に呼ばれるメソッド
   @IBAction func handleCancelButton(_ sender: Any) {
     // 画面を閉じる
     self.dismiss(animated: true, completion: nil)
@@ -360,6 +409,16 @@ class PostViewController: UIViewController, UITextViewDelegate {
   // 一番最初にこの画面が呼ばれた時に呼び出される
   override func viewDidLoad() {
         super.viewDidLoad()
+    
+    let timeBorder = CALayer()
+    timeBorder.frame = CGRect(x: 0, y: timeBorderView.frame.height, width: timeBorderView.frame.width, height: 0.5)
+    timeBorder.backgroundColor = UIColor.lightGray.cgColor
+    timeBorderView.layer.addSublayer(timeBorder)
+    
+    let muscleBorder = CALayer()
+    muscleBorder.frame = CGRect(x: 0, y: 0, width: muscleBorderView.frame.width, height: 0.5)
+    muscleBorder.backgroundColor = UIColor.lightGray.cgColor
+    muscleBorderView.layer.addSublayer(muscleBorder)
     
     textField.delegate = self
     
@@ -381,6 +440,8 @@ class PostViewController: UIViewController, UITextViewDelegate {
     tricepsSwitch.isOn = false
     sholderSwitch.isOn = false
     legSwitch.isOn = false
+    footSwitch.isOn = false
+    assSwitch.isOn = false
     calfSwitch.isOn = false
     
     // 背景をタップしたらdismissKeyboardメソッドを呼び出す

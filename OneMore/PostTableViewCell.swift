@@ -23,12 +23,6 @@ class PostTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-      
-      // 角丸を適用する
-      self.profielImage.layer.cornerRadius = 30
-      // 角丸に合わせて画像をマスクする
-      self.profielImage.layer.masksToBounds = true
-      
   }
   
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -50,7 +44,7 @@ class PostTableViewCell: UITableViewCell {
     // DateFormatterクラスのインスタンスを作成する
     let formatter = DateFormatter()
     // dateFormatプロパティに値を格納する
-    formatter.dateFormat = "yyyy-MM--dd HH:mm"
+    formatter.dateFormat = "yyyy/MM/dd HH:mm"
     // postDataクラスに保存された値をstring型で取りだす
     let dateString = formatter.string(from: postData.date!)
     self.dateLabel.text = dateString

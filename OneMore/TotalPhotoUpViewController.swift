@@ -11,13 +11,20 @@ import UIKit
 class TotalPhotoUpViewController: UIViewController {
   @IBOutlet weak var imageView: UIImageView!
   @IBOutlet weak var textView: UITextView!
+  @IBOutlet weak var dateLabel: UILabel!
   
   var photoInformation: PostData!
+  let formatter = DateFormatter()
   
     override func viewDidLoad() {
         super.viewDidLoad()
       imageView.image = photoInformation.image
       textView.text = photoInformation.caption
+      formatter.dateFormat = "yyyy/MM/dd HH:mm"
+      let dateString = formatter.string(from: photoInformation.date!)
+      self.dateLabel.text = dateString
+      
+      textView.isEditable = false
 
       print("DEBUG_PRINT:PHOTOUP: \(String(describing: imageView.image))")
         // Do any additional setup after loading the view.

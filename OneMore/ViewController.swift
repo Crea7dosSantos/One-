@@ -69,12 +69,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // タブをタップした時に表示するViewControllerを設定する
     let selfManagementViewController = storyboard?.instantiateViewController(withIdentifier: "Management")
     let selfWeighttDataViewController = storyboard?.instantiateViewController(withIdentifier: "Weight")
+    let shareViewController = storyboard?.instantiateViewController(withIdentifier: "Share")
     // let logoutViewController = storyboard?.instantiateViewController(withIdentifier: "Logout")
     // let settingViewController = storyboard?.instantiateViewController(withIdentifier: "Setting")
    
      tabBarController.setView(selfManagementViewController, at: 0)
+    tabBarController.setView(shareViewController, at: 1)
     tabBarController.setView(selfWeighttDataViewController, at: 2)
     
+    /*
     // 真ん中のタブはボタンとして扱う
     tabBarController.highlightButton(at: 1)
     tabBarController.setAction({
@@ -132,5 +135,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     postViewController.image = image!
     editor.present(navigationController, animated: true, completion: nil)
   }
+ */
+}
 }
 

@@ -10,21 +10,22 @@ import UIKit
 import Charts
 import RealmSwift
 import SVProgressHUD
+import Firebase
+import FirebaseAuth
 
 class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisValueFormatter, UITableViewDelegate, UITableViewDataSource {
   
   
   @IBOutlet weak var chartLabel: UILabel!
   @IBOutlet weak var tableView: UITableView!
-  @IBOutlet weak var recordLabel: UILabel!
   @IBOutlet weak var startWeightLabel: UILabel!
   @IBOutlet weak var currentWeightLabel: UILabel!
   @IBOutlet weak var differenceWeightLabel: UILabel!
   @IBOutlet weak var weightView: UIView!
+  @IBOutlet weak var recordBorderView: UIView!
   
   @IBOutlet weak var chartView: LineChartView!
   // UIViewのClassをLineChartViewに変更してChartを表示する
-  
   
   // Realmのインスタンスを取得する
   let realm = try! Realm()
@@ -36,11 +37,11 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
   // 以降内容をアップデートするとリスト内は自動的に更新される
   // Realmファイルで作成したAddWeightのデータを全てtimeDoubleの昇順で取り出す
   var addWeightArray = try! Realm().objects(AddWeight.self).sorted(
-    byKeyPath: "timeDouble", ascending: true)
+    byKeyPath: "timeDouble", ascending: true).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
   // Realmファイルで作成したAddWeightのデータを全てtimeの昇順で取り出す
-  var addWeightArrays = try! Realm().objects(AddWeight.self).sorted(byKeyPath: "time", ascending: true)
+  var addWeightArrays = try! Realm().objects(AddWeight.self).sorted(byKeyPath: "time", ascending: true).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
   // Realmファイルで作成したAddWeightのデータを全てtimeの降順で取り出す
-  var addWeightArraies = try! Realm().objects(AddWeight.self).sorted(byKeyPath: "time", ascending: false)
+  var addWeightArraies = try! Realm().objects(AddWeight.self).sorted(byKeyPath: "time", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
 
   // 配列で型をDouble型の値を定義しておく
   var timeArray: [Double] = []
@@ -61,8 +62,14 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
     // weightViewにweightBorderを追加する
     weightView.layer.addSublayer(weightBorder)
     
+    // recordBorderViewに上線をつける
+    let recordBorder = CALayer()
+    recordBorder.frame = CGRect(x: 0, y: 0, width: recordBorderView.frame.width, height: 1.0)
+    recordBorder.backgroundColor = UIColor.lightGray.cgColor
+    recordBorderView.layer.addSublayer(recordBorder)
+    
     // Realmから全てのデータを取り出す
-    let addWeights = realm.objects(AddWeight.self).sorted(byKeyPath: "time", ascending: true)
+    let addWeights = realm.objects(AddWeight.self).sorted(byKeyPath: "time", ascending: true).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
     
     // もしaddWeightsの配列の数が0なら
     if addWeights.count == 0 {
@@ -103,9 +110,6 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
     
     tableView.delegate = self
     tableView.dataSource = self
-    
-    recordLabel.backgroundColor = UIColor.blue
-    recordLabel.text = String("記録")
     
       // 定数に配列の値を格納しておく
       // mapを使用し、変数timeArrayにAddWeightファイルからtimeDoubleプロパティの各要素を格納する
@@ -174,7 +178,7 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
   override func viewWillAppear(_ animated: Bool) {
     
     // Realmから全てのデータを取り出す
-    let addWeights = realm.objects(AddWeight.self).sorted(byKeyPath: "time", ascending: true)
+    let addWeights = realm.objects(AddWeight.self).sorted(byKeyPath: "time", ascending: true).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
     
     // もしaddWeightsの配列の数が0なら
     if addWeights.count == 0 {
@@ -365,7 +369,7 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
       
           
           // Realmから全てのデータを取り出す
-        let addWeights = realm.objects(AddWeight.self).sorted(byKeyPath: "time", ascending: true)
+        let addWeights = realm.objects(AddWeight.self).sorted(byKeyPath: "time", ascending: true).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
         
           print("Test: \(addWeights)")
           

@@ -13,6 +13,7 @@ import FirebaseDatabase
 import FirebaseStorage
 import SDWebImage
 import RealmSwift
+import SVProgressHUD
 
 class SelfManagementViewController: UIViewController, UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
   @IBOutlet weak var userName: UINavigationItem!
@@ -31,22 +32,35 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
   // XibCategoryPhotoViewを型にして変数を宣言する
   var categoryXib: XibCategoryPhotoView!
   
+
   var postArray: [PostData] = []
+  
+  // OneMoreのDatabase上にchildメソッドで値を格納するGoalDreamを作成する
+  var goalRef = Database.database().reference().child(Goal.Setting)
   
   // DatabaseのobserveEventの登録状態を表す
   var observing = false
   
   let realm = try! Realm()
   
-  let morningArray = try! Realm().objects(Morning.self).sorted(byKeyPath: "id", ascending: false)
-  let noonArray = try! Realm().objects(Noon.self).sorted(byKeyPath: "id",ascending: false)
+  let morningArray = try! Realm().objects(Morning.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let noonArray = try! Realm().objects(Noon.self).sorted(byKeyPath: "id",ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let nightArray = try! Realm().objects(Night.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let upperBodyArray = try! Realm().objects(UpperBody.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let lowerBodyArray = try! Realm().objects(LowerBody.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let chestArray = try! Realm().objects(Chest.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let backArray = try! Realm().objects(Back.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let absArray = try! Realm().objects(Abs.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let bicepsArray = try! Realm().objects(Biceps.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let tricepsArray = try! Realm().objects(Triceps.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let sholderArray = try! Realm().objects(Sholder.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let legArray = try! Realm().objects(Leg.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let calfArray = try! Realm().objects(Calf.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let allArray = try! Realm().objects(All.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
   
   override func viewDidLoad() {
         super.viewDidLoad()
-    
-    // totalPhotoActionが画面が表示された段階でタップされてる状態にする
-    totalPhotoButton.isHighlighted = true
-    
+  
     // インスタンスの生成
     totalXib = XibTotalPhotoView()
     categoryXib = XibCategoryPhotoView()
@@ -61,18 +75,24 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
     
     // 最初に画面が呼び出された時はtotalPhotoButtonをタップ状態にする
     totalPhotoButton.isSelected = true
+    let totalPhotoTappedImage = UIImage(named: "totalPhotoBlue.png")
+    totalPhotoButton.setImage(totalPhotoTappedImage, for: .normal)
     
     // アプリを起動した時にnextViewにTotalPhotoViewを表示させる
     totalXib.frame = CGRect(x: 0, y: 203, width: self.view.frame.width, height: 400)
     // viewにtotalXibを表示する
     nextView.addSubview(totalXib)
-
     
     // TextViewにデリゲートを設定する
     dreamTextView.delegate = self
-    
     // TextViewの編集を無効にする
     dreamTextView.isEditable = false
+    
+    // profielImageViewを丸く表示する
+    self.profielImageView.layer.cornerRadius = 40
+    // 角丸に合わせて画像をマスクする
+    self.profielImageView.layer.masksToBounds = true
+    
     // profielViewに下線を表示する
     let weightBorder = CALayer()
     weightBorder.frame = CGRect(x: 0, y: profielView.frame.height, width: profielView.frame.width, height: 1.0)
@@ -154,7 +174,7 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
     legBorder.frame = CGRect(x: 0, y: categoryXib.legButton.frame.height, width: categoryXib.legButton.frame.width, height: 1.0)
     legBorder.backgroundColor = UIColor.lightGray.cgColor
     categoryXib.legButton.layer.addSublayer(legBorder)
-    //
+    
     // 現在ログインしているユーザーの情報を取得する
     let user = Auth.auth().currentUser
     
@@ -163,22 +183,53 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
     
     // もしユーザーのphotoURLがなければデフォルトを設定する
     if user?.photoURL == nil {
-      profielImageView.image = UIImage(named: "profielImageDefault")
+      profielImageView.image = UIImage(named: "SelfHuman128.png")
     } else {
       // もしユーザーのphotoURLが設定済みだったら設定する
       profielImageView.sd_setImage(with: user?.photoURL)
     }
     
     categoryXib.morningButton.addTarget(self, action: #selector(handleMorning), for: .touchUpInside)
-    categoryXib.noonButton.addTarget(self, action: #selector(hendleNoon), for: .touchUpInside)
+    categoryXib.noonButton.addTarget(self, action: #selector(handleNoon), for: .touchUpInside)
+    categoryXib.nightButton.addTarget(self, action: #selector(handleNight), for: .touchUpInside)
+    categoryXib.upperBodyButton.addTarget(self, action: #selector(handleUpperBody), for: .touchUpInside)
+    categoryXib.lowerBodyButton.addTarget(self, action: #selector(handleLowerBody), for: .touchUpInside)
+    categoryXib.chestButton.addTarget(self, action: #selector(handleChest), for: .touchUpInside)
+    categoryXib.backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
+    categoryXib.absButton.addTarget(self, action: #selector(handleAbs), for: .touchUpInside)
+    categoryXib.bicepsButton.addTarget(self, action: #selector(handleBiceps), for: .touchUpInside)
+    categoryXib.tricepsButton.addTarget(self, action: #selector(handleTriceps), for: .touchUpInside)
+    categoryXib.sholderButton.addTarget(self, action: #selector(handleSholder), for: .touchUpInside)
+    categoryXib.legButton.addTarget(self, action: #selector(handleLeg), for: .touchUpInside)
+    categoryXib.calfButton.addTarget(self, action: #selector(handleCalf), for: .touchUpInside)
         // Do any additional setup after loading the view.
   }
   
+  // 画面が表示される直前
   override func viewWillAppear(_ animated: Bool) {
+    let allCountString: String = String("\(allArray.count)")
+    recordLabel.text = allCountString
+    
+    let defaultPlace = goalRef.child("texts")
+    defaultPlace.observe(.value) { (snapshot: DataSnapshot) in self.dreamTextView.text = (snapshot.value! as AnyObject).description
+      print("DEBUG_PRINT: dreamTextViewに文字が表示されました")
+    }
+    
+    // もしFirebase上のGoalDreamのtextsにデータが存在すればfocusLabelを非表示にする
+    if let text = self.dreamTextView.text {
+      if text.isEmpty {
+        self.focusLabel.isHidden = false
+      } else {
+        self.focusLabel.isHidden = true
+      }
+    }
+    
+    // もしもcurrentUserがnilじゃなかったら
     if Auth.auth().currentUser != nil {
       if self.observing == false {
         // 要素が追加されたらpostArrayに追加してCollectionViewを再表示する
         let postRef = Database.database().reference().child(Const.PostPath)
+        // observeメソッドでイベントを指定しておくことで、指定イベントが発生した時にクロージャが呼び出される
         postRef.observe(.childAdded, with: { snapshot in
           print("DEBUG_PRINT: .childAddedイベントが発生しました")
           
@@ -243,17 +294,12 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
         // Dispose of any resources that can be recreated.
     }
   
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
   @IBAction func totalPhotoAction(_ sender: Any) {
     totalXib.isHidden = false
+    let totalButtonTappedImage = UIImage(named: "totalPhotoBlue.png")
+    totalPhotoButton.setImage(totalButtonTappedImage, for: .normal)
+    let categoryButtonNormalTappedImage = UIImage(named: "categoryPhotoNormal.png")
+    categoryPhotoButton.setImage(categoryButtonNormalTappedImage, for: .normal)
     print("totalPhotoがタップされました")
     // TotalPhotoViewを表示する
     totalXib.frame = CGRect(x: 0, y: 203, width: self.view.frame.width, height: 400)
@@ -267,6 +313,10 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
   
   @IBAction func categoryPhotoAction(_ sender: Any) {
     categoryXib.isHidden = false
+    let categoryButtonTappedImage = UIImage(named: "categoryPhotoBlue.png")
+    categoryPhotoButton.setImage(categoryButtonTappedImage, for: .normal)
+    let totalPhotoButtonNormalTappedImage = UIImage(named: "totalPhotoNormal.png")
+    totalPhotoButton.setImage(totalPhotoButtonNormalTappedImage, for: .normal)
     print("categoryPhotoActionがタップされました")
     // CategoryPhotoViewを表示する
     categoryXib.frame = CGRect(x: 0, y: 203, width: self.view.frame.width, height: 400)
@@ -296,7 +346,6 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
     return cell
     
   }
-  var selectedImage: UIImage?
   
   // 各セルを選択した時に実行されるメソッド
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -320,6 +369,7 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
       if text.isEmpty {
         focusLabel.isHidden = false
       }
+      focusLabel.isHidden = true
     }
   }
   
@@ -327,12 +377,47 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
   @objc func handleMorning() {
     performSegue(withIdentifier: "morningSegue", sender: nil)
   }
-  @objc func hendleNoon() {
+  // noonButtonがタップされた時に呼ばれるメソッド
+  @objc func handleNoon() {
     performSegue(withIdentifier: "noonSegue", sender: nil)
   }
+  // nightButtonがタップされた時に呼ばれるメソッド
+  @objc func handleNight() {
+    performSegue(withIdentifier: "nightSegue", sender: nil)
+  }
+  @objc func handleUpperBody() {
+    performSegue(withIdentifier: "upperBodySegue", sender: nil)
+  }
+  @objc func handleLowerBody() {
+    performSegue(withIdentifier: "lowerBodySegue", sender: nil)
+  }
+  @objc func handleChest() {
+    performSegue(withIdentifier: "chestSegue", sender: nil)
+  }
+  @objc func handleBack() {
+    performSegue(withIdentifier: "backSegue", sender: nil)
+  }
+  @objc func handleAbs() {
+    performSegue(withIdentifier: "absSegue", sender: nil)
+  }
+  @objc func handleBiceps() {
+    performSegue(withIdentifier: "bicepsSegue", sender: nil)
+  }
+  @objc func handleTriceps() {
+    performSegue(withIdentifier: "tricepsSegue", sender: nil)
+  }
+  @objc func handleSholder() {
+    performSegue(withIdentifier: "sholderSegue", sender: nil)
+  }
+  @objc func handleLeg() {
+    performSegue(withIdentifier: "legSegue", sender: nil)
+  }
+  @objc func handleCalf() {
+    performSegue(withIdentifier: "calfSegue", sender: nil)
+  }
+  
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    
     // もしcellSegue2で画面遷移をするとき
     if segue.identifier == "cellSegue2" {
       let totalPhotoUpViewController: TotalPhotoUpViewController = segue.destination as! TotalPhotoUpViewController
@@ -343,7 +428,7 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
       
       print("DEBUG_PRINT+\(String(describing: indexPath))")
       
-      // for文でセルの値をIndexPath型の配列で取得した値の各要素を取得する
+      // IndexPath型で取得した値をfor文でloopしながら各要素を取得する
       for index in indexPath! {
         // 遷移先画面の変数に
         totalPhotoUpViewController.photoInformation = postArray[index.row]
@@ -355,12 +440,83 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
       print("DEBUG_PRINT: 設定ボタンがタップされました")
       
     } else if segue.identifier == "morningSegue" {
-      print("moriningButtonがタップされました")
+      if morningArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("morningButtonがタップされました")
+    } else if segue.identifier == "noonSegue" {
+      if noonArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("noonButtonがタップされました")
+    } else if segue.identifier == "nightArray" {
+      if nightArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("nightButtonがタップされました")
+    } else if segue.identifier == "upperBodySegue" {
+      if upperBodyArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("upperBodyButtonがタップされました")
+    } else if segue.identifier == "lowerBodySegue" {
+      if lowerBodyArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("lowerBodyButtonがタップされました")
+    } else if segue.identifier == "chestSegue" {
+      if chestArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("chestButtonがタップされました")
+    } else if segue.identifier == "backSegue" {
+      if backArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("backButtonがタップされました")
+    } else if segue.identifier == "absSegue" {
+      if absArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("absButtonがタップされました")
+    } else if segue.identifier == "bicepsSegue" {
+      if bicepsArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("bicepsButtonがタップされました")
+    } else if segue.identifier == "tricepsSegue" {
+      if tricepsArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("tricepsButtonがタップされました")
+    } else if segue.identifier == "sholderSegue" {
+      if sholderArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("sholderButtonがタップされました")
+    } else if segue.identifier == "legSegue" {
+      if legArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("legButtonがタップされました")
+    } else if segue.identifier == "calfSegue" {
+      if calfArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("calfButtonがタップされました")
     }
   }
   
   
-  
+  /*
+   // MARK: - Navigation
+   
+   // In a storyboard-based application, you will often want to do a little preparation before navigation
+   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+   // Get the new view controller using segue.destinationViewController.
+   // Pass the selected object to the new view controller.
+   }
+   */
   
   
 

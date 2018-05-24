@@ -19,14 +19,13 @@ class Morning: Object {
   @objc dynamic var userName = ""
   
   // ImageString
-  @objc dynamic var imageString = ""
+  @objc dynamic var imageString: String = ""
   
   // caption
   @objc dynamic var caption = ""
   
   // date
-  @objc dynamic var time = ""
-  
+  @objc dynamic var time = Date()
   
   override static func primaryKey() -> String? {
     return "id"

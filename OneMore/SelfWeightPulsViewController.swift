@@ -189,10 +189,11 @@ class SelfWeightPulsViewController: UIViewController, UIGestureRecognizerDelegat
         // 新たな体重の場合すでに存在しているAddWeightのidに+1を追加して他のidと重ならないidを作成する
         // ファイルAddWeightのインスタンスを作成する
         let addWeight = AddWeight()
+        let filterArray = try! Realm().objects(AddWeight.self).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
         let addWeightArray = realm.objects(AddWeight.self)
         let dateString = dateButton.title(for: .normal) ?? ""
         // filterメソッドを作成し、同じ日付が存在するかを調べる
-        if 0 < realm.objects(AddWeight.self).filter("time == %@", dateString).count {
+        if 0 < filterArray.filter("time == %@", dateString).count {
           
           return
             

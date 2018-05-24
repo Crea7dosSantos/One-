@@ -16,19 +16,21 @@ import SVProgressHUD
 import SDWebImage
 
 
-class SettingViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
+class SettingViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate,UITextViewDelegate {
   @IBOutlet weak var profielView: UIView!
   @IBOutlet weak var displayNameTextField: UITextField!
   @IBOutlet weak var profielImageSetting: UIImageView!
   @IBOutlet weak var handleChangerButton: UIButton!
   @IBOutlet weak var textView: UITextView!
   @IBOutlet weak var selfNoteButton: UIButton!
+  @IBOutlet weak var handleLogoutButton: UIButton!
+  @IBOutlet weak var focusLabel: UILabel!
+  @IBOutlet weak var borderView: UIView!
   //DB参照作成
   // OneMoreのDatabase上にChildメソッドで値を格納するGoalDreamを作成する
   var goalRef = Database.database().reference().child(Goal.Setting)
   
   let user = Auth.auth().currentUser
-  
   
   @IBAction func handleChangeButton(_ sender: Any) {
     if let displayName = displayNameTextField.text {
@@ -64,12 +66,30 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
   
   override func viewWillAppear(_ animated: Bool) {
      super.viewWillAppear(animated)
+    print("viewWillAppearが表示されました")
+    print("DEBUG_PRINT_TEXT: \(textView.text)")
     
     // 表示名を取得してTextFieldに設定する
     let user = Auth.auth().currentUser
     if let user = user {
       displayNameTextField.text = user.displayName
+      print("DEBUG_PRINT: 表示名を設定しました")
+      
+      let defaultPlace = goalRef.child("texts")
+      defaultPlace.observe(.value) { (snapshot: DataSnapshot) in self.textView.text = (snapshot.value! as AnyObject).description
+        print("DEBUG_PRINT: SelfNoteに文字が表示されました")
+        }
+      }
+    
+    // もしFirebase上のGoalDreamのtextsにデータが存在すればfocusLabelを非表示にする
+    if let text = self.textView.text {
+      if text.isEmpty {
+        self.focusLabel.isHidden = false
+      } else {
+        self.focusLabel.isHidden = true
+      }
     }
+    print("DEBUG_PRINT_TEXT2: \(textView.text)")
   }
   
     override func viewDidLoad() {
@@ -78,34 +98,33 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
       // もしユーザーのphotoURLが無ければデフォルトを設定する
       if user?.photoURL == nil {
         // もしプロフィール写真が設定されていなかったらデフォルトを設定する
-        profielImageSetting.image = UIImage(named: "profielImageDefault")
+        profielImageSetting.image = UIImage(named: "human128.png")
       } else {
         // もしユーザーのphotoURLが設定済みだったら設定する
         profielImageSetting.sd_setImage(with: user?.photoURL)
         
       }
       
+      navigationItem.title = "設定"
+      
       // profielViewに下線を表示する
       let weightBorder = CALayer()
       weightBorder.frame = CGRect(x: 0, y: profielView.frame.height, width: profielView.frame.width, height: 1.0)
       weightBorder.backgroundColor = UIColor.lightGray.cgColor
-      // Viewに追加する
       profielView.layer.addSublayer(weightBorder)
+      // borderViewに下線を表示する
+      let displayBorder = CALayer()
+      displayBorder.frame = CGRect(x: 0, y: borderView.frame.height, width: borderView.frame.width, height: 1.0)
+      displayBorder.backgroundColor = UIColor.lightGray.cgColor
+      borderView.layer.addSublayer(displayBorder)
       
-      // ImageViewの枠線を適用する
-      self.profielImageSetting.layer.borderColor = UIColor.black.cgColor
-      // 枠線の幅を適用する
-      self.profielImageSetting.layer.borderWidth = 2
+      /*
       // 角丸を適用する
-      self.profielImageSetting.layer.cornerRadius = 30
+      self.profielImageSetting.layer.cornerRadius = 50
       // 角丸に合わせて画像をマスクする
       self.profielImageSetting.layer.masksToBounds = true
-      
-      // 表示名を変更ボタンの角を取る
-      self.handleChangerButton.layer.cornerRadius = 30
-      // 角丸に合わせてボタンをマスクする
-      self.handleChangerButton.layer.masksToBounds = true
-      
+      */
+
       // UIImageViewなどはもともと検知を受け取らない設定なのでユーザーインタラクションを有効に設定する
       profielImageSetting.isUserInteractionEnabled = true
       
@@ -117,6 +136,7 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
       
       // デリゲートをセットする
       tapGesture.delegate = self
+      textView.delegate = self
       
       // 背景をタップしたらdismissKeyboardメソッドを呼び出す
       let tapGesture2: UITapGestureRecognizer = UITapGestureRecognizer(target: self,action: #selector(dismissKeyboard))
@@ -258,20 +278,57 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     }
   }
-  
-  
-  
+
   // キャンセルした時に呼ばれる
   func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
     // 閉じる
     picker.dismiss(animated:  true, completion: nil)
   }
   
+  @IBAction func handleLogoutButtonAction(_ sender: Any) {
+    // ログアウトする
+    try! Auth.auth().signOut()
+    
+    // HUDで完了を知らせる
+    SVProgressHUD.showSuccess(withStatus: "ログアウトに成功しました")
+    
+    // ログイン画面を表示する
+    let loginViewControlelr = self.storyboard?.instantiateViewController(withIdentifier: "Login")
+    self.present(loginViewControlelr!, animated: true, completion: nil)
+    
+    // ログイン画面から戻ってきた時のためにSelf管理画面(index = 0)を選択している状態にしておく
+    //let tabBarController = parent as! ESTabBarController
+    //tabBarController.setSelectedIndex(0, animated: true)
+  }
+  
+  func setDream(_ dream: Dream) {
+    self.textView.text = dream.dream
+    print("DEBUG_PRINT: \(textView.text)")
+  }
   
   @IBAction func selfNoteButtonAction(_ sender: Any) {
-    let goalData = ["success": textView.text!]
-    goalRef.childByAutoId().setValue(goalData)
+    let goalData = ["texts": textView.text!]
+    goalRef.updateChildValues(goalData)
   }
+  
+  // textViewがフォーカスされたら、Labelを非表示にする
+  func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+    focusLabel.isHidden = true
+    return true
+  }
+  
+  // textViewからフォーカスが外れて、TextViewが空だったらlabelを再表示する
+  func textViewDidEndEditing(_ textView: UITextView) {
+    // もしtextFieldの値がisEmptyならlabelを表示する
+    if let text = textView.text {
+      if text.isEmpty {
+        focusLabel.isHidden = false
+      }
+      focusLabel.isHidden = true
+    }
+  }
+  
+  
   
 
     

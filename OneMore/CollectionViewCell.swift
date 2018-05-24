@@ -19,7 +19,7 @@ class CollectionViewCell: UICollectionViewCell {
   func setPostData(_ postData: PostData) {
     self.imageView.image = postData.image
     
-    print("DBUG_PRINT_CELL: \(String(describing: imageView.image))")
+    print("DEBUG_PRINT_CELL: \(String(describing: imageView.image))")
     
   }
   
