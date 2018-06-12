@@ -47,20 +47,18 @@ class BackPhotoViewController: UIViewController, UICollectionViewDelegate, UICol
     return backArray.count
   }
   
+  var imageArray = [UIImage]()
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = backCollectionView.dequeueReusableCell(withReuseIdentifier: "BackCell", for: indexPath) as! BackPhotoViewCell
-    if backArray.count == 0 {
-      print("DEBUG_PRINT: backArrayのデータが0です")
-    } else if backArray.count > 0 {
-      print("DEBUG_PRINT: backArrayのデータが0以上です")
-      
+    
       // for文でbackArrayをloopさせ全ての要素を取り出す
       for backArrayValue in backArray {
         var image: UIImage
         image = UIImage(data: Data(base64Encoded: backArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
-        cell.imageView.image = image
+        imageArray.append(image)
       }
-    }
+    cell.imageView.image = imageArray[indexPath.row]
     return cell
   }
   

@@ -48,20 +48,18 @@ class LowerBodyPhotoViewController: UIViewController, UICollectionViewDelegate, 
     return lowerBodyArray.count
   }
   
+  var imageArray = [UIImage]()
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = lowerBodyCollectionView.dequeueReusableCell(withReuseIdentifier: "LowerBodyCell", for: indexPath) as! LowerBodyPhotoViewCell
-    if lowerBodyArray.count == 0 {
-      print("DEBUG_PRINT: lowerBodyArrayのデータが0です")
-    } else if lowerBodyArray.count > 0 {
-      print("DEBUG_PRINT: lowerBodyArrayのデータが0以上です")
       
       // for文でlowerBodyArrayをloopさせ全ての要素を取り出す
       for lowerBodyArrayValue in lowerBodyArray {
         var image: UIImage
         image = UIImage(data: Data(base64Encoded: lowerBodyArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
-        cell.imageView.image = image
-      }
+        imageArray.append(image)
     }
+    cell.imageView.image = imageArray[indexPath.row]
     return cell
   }
   

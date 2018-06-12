@@ -11,7 +11,7 @@ import Firebase
 import FirebaseAuth
 import SVProgressHUD
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
   @IBOutlet weak var AppNameLabel: UILabel!
   @IBOutlet weak var mailAddressTextField: UITextField!
   @IBOutlet weak var passwordTextField: UITextField!
@@ -56,6 +56,17 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
       
+      // キーボードの改行ボタンのタイプを変更する
+      mailAddressTextField.returnKeyType = .done
+      passwordTextField.returnKeyType = .done
+      
+      // テキストを全消去するボタンを表示
+      mailAddressTextField.clearButtonMode = .always
+      passwordTextField.clearButtonMode = .always
+      
+      mailAddressTextField.delegate = self
+      passwordTextField.delegate = self
+      
       // 背景をタップしたらdissmissKeyboardメソッドを呼ぶ様に設定する
       let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
       self.view.addGestureRecognizer(tapGesture)
@@ -73,6 +84,13 @@ class LoginViewController: UIViewController {
   
   @IBAction func unwind(_ segue: UIStoryboardSegue) {
     // 他の画面からsegueを使って戻ってきた時に呼ばれる
+  }
+  
+  // キーボードの改行ボタンをタップしたときの処理
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    // キーボードを隠す
+    textField.resignFirstResponder()
+    return true
   }
     
 

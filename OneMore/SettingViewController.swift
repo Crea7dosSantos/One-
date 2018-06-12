@@ -14,9 +14,10 @@ import FirebaseDatabase
 import FirebaseStorage
 import SVProgressHUD
 import SDWebImage
+import RealmSwift
 
 
-class SettingViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate,UITextViewDelegate {
+class SettingViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate,UITextViewDelegate, UIScrollViewDelegate {
   @IBOutlet weak var profielView: UIView!
   @IBOutlet weak var displayNameTextField: UITextField!
   @IBOutlet weak var profielImageSetting: UIImageView!
@@ -26,11 +27,17 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
   @IBOutlet weak var handleLogoutButton: UIButton!
   @IBOutlet weak var focusLabel: UILabel!
   @IBOutlet weak var borderView: UIView!
-  //DB参照作成
-  // OneMoreのDatabase上にChildメソッドで値を格納するGoalDreamを作成する
-  var goalRef = Database.database().reference().child(Goal.Setting)
+  @IBOutlet weak var selfNoteTextView: UITextView!
+  @IBOutlet weak var scrollView: UIScrollView!
   
   let user = Auth.auth().currentUser
+  
+  let realm = try! Realm()
+  
+  // textFieldの情報を格納する変数をUITextFiledのインスタンスとして生成しておく
+  var textActiveField = UITextView()
+  
+  let selfNoteArrays = try! Realm().objects(SelfNote.self).sorted(byKeyPath: "id", ascending: true).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
   
   @IBAction func handleChangeButton(_ sender: Any) {
     if let displayName = displayNameTextField.text {
@@ -74,13 +81,20 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
     if let user = user {
       displayNameTextField.text = user.displayName
       print("DEBUG_PRINT: 表示名を設定しました")
-      
-      let defaultPlace = goalRef.child("texts")
-      defaultPlace.observe(.value) { (snapshot: DataSnapshot) in self.textView.text = (snapshot.value! as AnyObject).description
-        print("DEBUG_PRINT: SelfNoteに文字が表示されました")
-        }
-      }
     
+      if selfNoteArrays.count == 0 {
+        
+        focusLabel.isHidden = false
+        
+      } else if selfNoteArrays.count > 0 {
+        
+        focusLabel.isHidden = true
+        
+        let selfNoteArrayLast = selfNoteArrays.last
+        let selfNoteLastText = selfNoteArrayLast?.text
+        selfNoteTextView.text = selfNoteLastText
+        
+      }
     // もしFirebase上のGoalDreamのtextsにデータが存在すればfocusLabelを非表示にする
     if let text = self.textView.text {
       if text.isEmpty {
@@ -91,6 +105,7 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     print("DEBUG_PRINT_TEXT2: \(textView.text)")
   }
+}
   
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,13 +132,6 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
       displayBorder.frame = CGRect(x: 0, y: borderView.frame.height, width: borderView.frame.width, height: 1.0)
       displayBorder.backgroundColor = UIColor.lightGray.cgColor
       borderView.layer.addSublayer(displayBorder)
-      
-      /*
-      // 角丸を適用する
-      self.profielImageSetting.layer.cornerRadius = 50
-      // 角丸に合わせて画像をマスクする
-      self.profielImageSetting.layer.masksToBounds = true
-      */
 
       // UIImageViewなどはもともと検知を受け取らない設定なのでユーザーインタラクションを有効に設定する
       profielImageSetting.isUserInteractionEnabled = true
@@ -137,6 +145,7 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
       // デリゲートをセットする
       tapGesture.delegate = self
       textView.delegate = self
+      scrollView.delegate = self
       
       // 背景をタップしたらdismissKeyboardメソッドを呼び出す
       let tapGesture2: UITapGestureRecognizer = UITapGestureRecognizer(target: self,action: #selector(dismissKeyboard))
@@ -161,9 +170,7 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
     print("DEBUG:PRINT: profielImageSettingがタップされました")
     
     // UIAlertControllerのインスタンスを生成
-    let alertView: UIAlertController = UIAlertController(title: "アラート",
-                                      message: "サンプル",
-                                      preferredStyle: UIAlertControllerStyle.actionSheet)
+    let alertView: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
     
     let action1 = UIAlertAction(title: "ライブラリ",
                                     style: .default) { (action: UIAlertAction) in
@@ -301,19 +308,32 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
     //tabBarController.setSelectedIndex(0, animated: true)
   }
   
-  func setDream(_ dream: Dream) {
-    self.textView.text = dream.dream
-    print("DEBUG_PRINT: \(textView.text)")
-  }
-  
+
   @IBAction func selfNoteButtonAction(_ sender: Any) {
-    let goalData = ["texts": textView.text!]
-    goalRef.updateChildValues(goalData)
+    let selfNote = SelfNote()
+    
+    let selfNoteArray = self.realm.objects(SelfNote.self)
+    // もしもselfNoteArrayのcountプロパティが0じゃなかったら
+    if selfNoteArray.count != 0 {
+      selfNote.id = selfNoteArray.max(ofProperty: "id")! + 1
+    }
+    try! self.realm.write {
+      // 入力されたテキストをこのSelfNoteに保存する
+      selfNote.text = self.selfNoteTextView.text!
+      selfNote.userName = (Auth.auth().currentUser?.displayName!)!
+      self.realm.add(selfNote, update: true)
+    }
+    
+    SVProgressHUD.showSuccess(withStatus: "SelfNoteの変更を保存しました")
+    // SelfNoteのキーボードを閉じる
+    selfNoteTextView.resignFirstResponder()
   }
   
   // textViewがフォーカスされたら、Labelを非表示にする
   func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
     focusLabel.isHidden = true
+    
+    textActiveField = textView
     return true
   }
   
@@ -328,10 +348,6 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
   }
   
-  
-  
-
-    
 
     /*
     // MARK: - Navigation

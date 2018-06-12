@@ -17,5 +17,6 @@ target 'OneMore' do
   pod 'Firebase/Storage'
   pod 'SDWebImage'
   pod 'Charts'
+  pod 'Google-Mobile-Ads-SDK'
 
 end

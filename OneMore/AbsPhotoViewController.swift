@@ -47,19 +47,18 @@ class AbsPhotoViewController: UIViewController, UICollectionViewDataSource, UICo
     return absArray.count
   }
   
+  var imageArray = [UIImage]()
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = absCollectionView.dequeueReusableCell(withReuseIdentifier: "AbsCell", for: indexPath) as! AbsPhotoViewCell
-    if absArray.count == 0 {
-      print("DEBUG_PRINT: absArrayのデータが0です")
-    } else if absArray.count > 0 {
-      print("DEBUG_PRINT: absArrayのデータが0以上です")
+   
     // for文でabsArrayをloopさせ全ての要素を取り出す
     for absArrayValue in absArray {
       var image: UIImage
       image = UIImage(data: Data(base64Encoded: absArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
-      cell.imageView.image = image
-    }
+      imageArray.append(image)
   }
+  cell.imageView.image = imageArray[indexPath.row]
   return cell
  }
   

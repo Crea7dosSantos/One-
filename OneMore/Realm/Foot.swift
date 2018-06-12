@@ -16,10 +16,10 @@ class Foot: Object {
   @objc dynamic var postID = ""
   
   // UserName
-  @objc dynamic var UserName = ""
+  @objc dynamic var userName = ""
   
   // ImageString
-  @objc dynamic var ImageString: String = ""
+  @objc dynamic var imageString: String = ""
   
   // caption
   @objc dynamic var caption = ""

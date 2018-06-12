@@ -2,15 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Image.png",
+      "filename" : "個人情報ファイル32.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "個人情報ファイル64.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "個人情報ファイル128.png",
       "scale" : "3x"
     }
   ],

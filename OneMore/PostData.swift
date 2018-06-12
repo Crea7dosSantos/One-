@@ -22,6 +22,7 @@ class PostData: NSObject {
   var isLiked: Bool = false
   var commentList: [String] = []
   
+  
   // Firebaseはデータの追加や更新があるとDataSnapshotクラスのデータが渡される。keyプロパティがこの要素自身のIDとなる。そしてvalueプロパティにデータが入っている。valueプロパティはキーと値の組み合わせで、辞書型となっている。キーはStringなので、valueDictionary["name"]などで値を取り出す。
   init(snapshot: DataSnapshot, myId: String) {
     // 自身のidにsnapshotのkeyを指定する
@@ -42,12 +43,14 @@ class PostData: NSObject {
     let time = valueDictionary["time"] as? String
     self.date = Date(timeIntervalSinceReferenceDate: TimeInterval(time!)!)
     
-    if let likes = valueDictionary["likes"] as? [String] {
-      self.likes = likes
-    }
-    
+    // likesと同じ要領でcommentListも作成する
     if let commentList = valueDictionary["commentList"] as? [String] {
       self.commentList = commentList
+    }
+    
+    // もしlikesに配列としてlikeとして取り出した際に値があった場合、このPostDataクラスで宣言したlikesというString型の配列にlikesを格納する
+    if let likes = valueDictionary["likes"] as? [String] {
+      self.likes = likes
     }
     
     // for文でlikesの中にliked

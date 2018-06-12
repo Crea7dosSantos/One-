@@ -25,7 +25,7 @@ class All: Object {
   @objc dynamic var caption = ""
   
   // date
-  @objc dynamic var time = ""
+  @objc dynamic var time = Date()
   
   override static func primaryKey() -> String? {
     return "id"

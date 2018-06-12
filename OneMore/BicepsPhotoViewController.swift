@@ -47,20 +47,18 @@ class BicepsPhotoViewController: UIViewController, UICollectionViewDelegate, UIC
     return bicepsArray.count
   }
   
+  var imageArrray = [UIImage]()
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = bicepsCollectionView.dequeueReusableCell(withReuseIdentifier: "BicepsCell", for: indexPath) as! BicepsPhotoViewCell
-    if bicepsArray.count == 0 {
-      print("DEBUG_PRINT: bicepsArrayのデータが0です")
-    } else if bicepsArray.count > 0 {
-      print("DEBUG_PRINT: bicepsArrayのデータが0以上です")
       
       // for文でbicepsArrayをloopさせ全ての要素を取り出す
       for bicepsArrayValue in bicepsArray {
         var image: UIImage
         image = UIImage(data: Data(base64Encoded: bicepsArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
-        cell.imageView.image = image
+        imageArrray.append(image)
       }
-    }
+   cell.imageView.image = imageArrray[indexPath.row]
     return cell
   }
   

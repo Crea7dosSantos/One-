@@ -32,14 +32,8 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
   // XibCategoryPhotoViewを型にして変数を宣言する
   var categoryXib: XibCategoryPhotoView!
   
-
-  var postArray: [PostData] = []
-  
   // OneMoreのDatabase上にchildメソッドで値を格納するGoalDreamを作成する
   var goalRef = Database.database().reference().child(Goal.Setting)
-  
-  // DatabaseのobserveEventの登録状態を表す
-  var observing = false
   
   let realm = try! Realm()
   
@@ -55,8 +49,11 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
   let tricepsArray = try! Realm().objects(Triceps.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
   let sholderArray = try! Realm().objects(Sholder.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
   let legArray = try! Realm().objects(Leg.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let footArray = try! Realm().objects(Foot.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let assArray = try! Realm().objects(Ass.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
   let calfArray = try! Realm().objects(Calf.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
   let allArray = try! Realm().objects(All.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  let selfNoteArray = try! Realm().objects(SelfNote.self).sorted(byKeyPath: "id", ascending: true).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
   
   override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,7 +113,7 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
     categoryXib.timeView.layer.addSublayer(timeViewSideBorder)
     // muscleViewに横線をつける
     let muscleSideBorder = CALayer()
-    muscleSideBorder.frame = CGRect(x: 100, y: 10, width: 1.0, height: 370)
+    muscleSideBorder.frame = CGRect(x: 100, y: 10, width: 1.0, height: 470)
     muscleSideBorder.backgroundColor = UIColor.lightGray.cgColor
     categoryXib.muscleView.layer.addSublayer(muscleSideBorder)
     // morningButtonに下線をつける
@@ -174,6 +171,23 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
     legBorder.frame = CGRect(x: 0, y: categoryXib.legButton.frame.height, width: categoryXib.legButton.frame.width, height: 1.0)
     legBorder.backgroundColor = UIColor.lightGray.cgColor
     categoryXib.legButton.layer.addSublayer(legBorder)
+    // footButtonに下線をつける
+    let footBorder = CALayer()
+    footBorder.frame = CGRect(x: 0, y: categoryXib.footButton.frame.height, width: categoryXib.footButton.frame.width, height: 1.0)
+    footBorder.backgroundColor = UIColor.lightGray.cgColor
+    categoryXib.footButton.layer.addSublayer(footBorder)
+    // assButtonに下線をつける
+    let assBorder = CALayer()
+    assBorder.frame = CGRect(x: 0, y: categoryXib.absButton.frame.height, width: categoryXib.assButton.frame.width, height: 1.0)
+    assBorder.backgroundColor = UIColor.lightGray.cgColor
+    categoryXib.assButton.layer.addSublayer(assBorder)
+    // catogoryViewに下線をつける
+    let categoryBorder = CALayer()
+    categoryBorder.frame = CGRect(x: 0, y: categoryXib.categoryView.frame.height, width: categoryXib.categoryView.frame.width, height: 1.0)
+    categoryBorder.backgroundColor = UIColor.lightGray.cgColor
+    categoryXib.categoryView.layer.addSublayer(categoryBorder)
+   
+    
     
     // 現在ログインしているユーザーの情報を取得する
     let user = Auth.auth().currentUser
@@ -201,7 +215,10 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
     categoryXib.tricepsButton.addTarget(self, action: #selector(handleTriceps), for: .touchUpInside)
     categoryXib.sholderButton.addTarget(self, action: #selector(handleSholder), for: .touchUpInside)
     categoryXib.legButton.addTarget(self, action: #selector(handleLeg), for: .touchUpInside)
+    categoryXib.footButton.addTarget(self, action: #selector(handleFoot), for: .touchUpInside)
+    categoryXib.assButton.addTarget(self, action: #selector(handleAss), for: .touchUpInside)
     categoryXib.calfButton.addTarget(self, action: #selector(handleCalf), for: .touchUpInside)
+    
         // Do any additional setup after loading the view.
   }
   
@@ -210,9 +227,18 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
     let allCountString: String = String("\(allArray.count)")
     recordLabel.text = allCountString
     
-    let defaultPlace = goalRef.child("texts")
-    defaultPlace.observe(.value) { (snapshot: DataSnapshot) in self.dreamTextView.text = (snapshot.value! as AnyObject).description
-      print("DEBUG_PRINT: dreamTextViewに文字が表示されました")
+    if selfNoteArray.count == 0 {
+      
+      focusLabel.isHidden = false
+      
+    } else if selfNoteArray.count > 0 {
+      
+      focusLabel.isHidden = true
+      
+      let selfNoteArrayLast = selfNoteArray.last
+      let selfNoteLastText = selfNoteArrayLast?.text
+      dreamTextView.text = selfNoteLastText
+      
     }
     
     // もしFirebase上のGoalDreamのtextsにデータが存在すればfocusLabelを非表示にする
@@ -223,72 +249,9 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
         self.focusLabel.isHidden = true
       }
     }
-    
-    // もしもcurrentUserがnilじゃなかったら
-    if Auth.auth().currentUser != nil {
-      if self.observing == false {
-        // 要素が追加されたらpostArrayに追加してCollectionViewを再表示する
-        let postRef = Database.database().reference().child(Const.PostPath)
-        // observeメソッドでイベントを指定しておくことで、指定イベントが発生した時にクロージャが呼び出される
-        postRef.observe(.childAdded, with: { snapshot in
-          print("DEBUG_PRINT: .childAddedイベントが発生しました")
-          
-          // PostDataクラスを生成して受け取ったデータを設定する
-          if let uid = Auth.auth().currentUser?.uid {
-            let postData = PostData(snapshot: snapshot, myId: uid)
-            self.postArray.insert(postData, at: 0)
-            
-            self.totalXib.totalCollectionView.reloadData()
-          }
-        })
-        // 要素が変更されたら街灯のデータをpostArrayから一度削除した後に新しいデータを追加してCollectionViewを再表示する
-        postRef.observe(.childChanged, with: {snapshot in
-          print("DEBUG_PRINT: .childChangedイベントが発生しました。")
-          
-          if let uid = Auth.auth().currentUser?.uid {
-            // PostDataクラスを生成して受け取ったデータを設定する
-            let postData = PostData(snapshot: snapshot, myId: uid)
-            
-            // 保持している配列からidが同じものを探す
-            var index: Int = 0
-            for post in self.postArray {
-              if post.id == postData.id {
-                index = self.postArray.index(of: post)!
-                break
-              }
-            }
-            
-            // 差し変えるため一度削除する
-            self.postArray.remove(at: index)
-            
-            // 削除したところに更新済みのデータを追加する
-            self.postArray.insert(postData, at: index)
-            
-            // TableViewを再表示する
-            self.totalXib.totalCollectionView.reloadData()
-          }
-        })
-        
-        // DatabaseのobserveEventが上記コードにより登録されたため
-        // trueとする
-        observing = true
-      }
-    } else {
-      if observing == true {
-        // ログアウトを検出したら、一旦テーブルをクリアしてオブザーバーを削除する。
-        // テーブルをクリアする
-        postArray = []
-        totalXib.totalCollectionView.reloadData()
-        // オブザーバーを削除する
-        Database.database().reference().removeAllObservers()
-        
-        // DatabaseのobserveEventが上記コードにより解除されたため
-        // falseとする
-        observing = false
-      }
-    }
+    totalXib.totalCollectionView.reloadData()
   }
-
+   
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -325,6 +288,7 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
     
     totalXib.isHidden = true
     totalPhotoButton.isSelected = false
+    
   }
   
   // textViewがフォーカスされたら、Labelを非表示にする
@@ -335,16 +299,24 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
   
   // CollectionViewのCellの数を返す
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return postArray.count
+    return allArray.count
   }
+  
+  // 変数imageArrayをメソッドのスコープの外で定義
+  var imageArray = [UIImage]()
   
   // collectionViewのCellの内容を返す
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = totalXib.totalCollectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionViewCell
-    cell.setPostData(postArray[indexPath.row])
     
+    // for文でassArrayをloopさせ全ての要素を取り出す
+    for allArrayValue in allArray {
+      var image: UIImage
+      image = UIImage(data: Data(base64Encoded: allArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
+      imageArray.append(image)
+    }
+    cell.imageView.image = imageArray[indexPath.row]
     return cell
-    
   }
   
   // 各セルを選択した時に実行されるメソッド
@@ -415,6 +387,12 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
   @objc func handleCalf() {
     performSegue(withIdentifier: "calfSegue", sender: nil)
   }
+  @objc func handleFoot() {
+    performSegue(withIdentifier: "footSegue", sender: nil)
+  }
+  @objc func handleAss() {
+    performSegue(withIdentifier: "assSegue", sender: nil)
+  }
   
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -431,10 +409,10 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
       // IndexPath型で取得した値をfor文でloopしながら各要素を取得する
       for index in indexPath! {
         // 遷移先画面の変数に
-        totalPhotoUpViewController.photoInformation = postArray[index.row]
+        totalPhotoUpViewController.photoInformation = allArray[index.row]
       }
     
-      print("DEBUG_PRINT: \(totalPhotoUpViewController.photoInformation)")
+      print("DEBUG_PRINT: \(String(describing: totalPhotoUpViewController.photoInformation))")
   
     } else if segue.identifier == "settingSegue" {
       print("DEBUG_PRINT: 設定ボタンがタップされました")
@@ -504,6 +482,16 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
         SVProgressHUD.showError(withStatus: "データがありません")
       }
       print("calfButtonがタップされました")
+    } else if segue.identifier == "footSegue" {
+      if footArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("footButtonがタップされました")
+    } else if segue.identifier == "assSegue" {
+      if assArray.count == 0 {
+        SVProgressHUD.showError(withStatus: "データがありません")
+      }
+      print("assButtonがタップされました")
     }
   }
   

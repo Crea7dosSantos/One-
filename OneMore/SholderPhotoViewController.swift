@@ -46,19 +46,18 @@ class SholderPhotoViewController: UIViewController, UICollectionViewDelegate, UI
     return sholderArray.count
   }
   
+  var imageArray = [UIImage]()
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = sholderCollectionView.dequeueReusableCell(withReuseIdentifier: "SholderCell", for: indexPath) as! SholderPhotoViewCell
-    if sholderArray.count == 0 {
-      print("DEBUG_PRINT: sholderArrayのデータが0です")
-    } else if sholderArray.count > 0 {
-      print("DEBUG_PRINT: sholderArrayのデータが0以上です")
+    
       // for文でabsArrayをloopさせ全ての要素を取り出す
       for sholderArrayValue in sholderArray {
         var image: UIImage
         image = UIImage(data: Data(base64Encoded: sholderArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
-        cell.imageView.image = image
-      }
+        imageArray.append(image)
     }
+    cell.imageView.image = imageArray[indexPath.row]
     return cell
   }
   

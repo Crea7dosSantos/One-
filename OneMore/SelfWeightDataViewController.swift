@@ -318,7 +318,7 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
       cell.detailTextLabel?.text = nil
     } else if addWeightArrays.count > 0 {
     cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
-    cell.textLabel?.text = addWeight.weight
+    cell.textLabel?.text = "\(addWeight.weight) kg"
     cell.detailTextLabel?.text = addWeight.time
     }
     return cell
@@ -348,6 +348,7 @@ class SelfWeightDataViewController: UIViewController, ChartViewDelegate, IAxisVa
         let weightArray: [Double] = addWeightArray.map {$0.weightDouble}
         
         SVProgressHUD.showSuccess(withStatus: "体重データを削除しました")
+        
         
         // もしtimeArrayの配列の数が3以下の場合はchartViewを非表示にしchartLabelを表示させる
         if timeArray.count < 3 {

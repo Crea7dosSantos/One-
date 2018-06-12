@@ -49,21 +49,19 @@ class NoonPhotoViewController: UIViewController, UICollectionViewDelegate, UICol
     return noonArray.count
   }
   
+  var imageArray = [UIImage]()
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = noonCollectionView.dequeueReusableCell(withReuseIdentifier: "NoonCell", for: indexPath) as! NoonPhotoViewCell
-    if noonArray.count == 0 {
-      print("DEBUG_PRINT: noonArrayのデータが0です")
-    } else if noonArray.count > 0 {
-      print("DEBUG_PRINT: noonArrayのデータが0以上です")
-      
+
       // for文でnoonArrayをloopさせ全ての要素を取り出す
       for noonArrayValue in noonArray {
         var image: UIImage
         image = UIImage(data: Data(base64Encoded: noonArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
-        
-        cell.imageView.image = image
+        imageArray.append(image)
+      
       }
-    }
+    cell.imageView.image = imageArray[indexPath.row]
     return cell
   }
   

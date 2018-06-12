@@ -40,9 +40,13 @@ class PostViewController: UIViewController, UITextViewDelegate {
   // このインスタンスを使用し読み書きのメソッドを呼び出す
   let realm = try! Realm()
   
+  let user = Auth.auth().currentUser
  
+  
   @IBAction func handlePostButton(_ sender: Any) {
-  // ImageViewから画像を取得する
+    print("DEBUG_PRINT: 完了ボタンがタップされました")
+      
+    // ImageViewから画像を取得する
     // UIImageJPEGRepresentationメソッドでJPEG形式のDataクラスに変換する
     let imageData = UIImageJPEGRepresentation(imageView.image!, 0.5)
     // Dataクラスのbase64EncoeedString(options:)メソッドの引数に.lineLength64Charactersを与えてBase64方式でテキスト形式に変換する
@@ -54,357 +58,690 @@ class PostViewController: UIViewController, UITextViewDelegate {
     // 表示名を現在ログインしているUserのdisplayNameプロパティから取得する
     let name = Auth.auth().currentUser?.displayName
     
+    // 公開ボタンをタップした時に動作する
+    let alertView: UIAlertController = UIAlertController(title: "この投稿を公開しますか？", message: "公開をタップするとこの投稿は公開され、非公開をタップすると公開はされません。", preferredStyle: UIAlertControllerStyle.alert)
+    
+    let share = UIAlertAction(title: "公開", style: .default) { (action: UIAlertAction) in
+    
     // 辞書を作成してFirebaseに保存する
     // postRefを使用してFirebaseサーバ上にある保存先に代入しておく
     // このpostRefを使用して画像やキャプションをDatabaseへ保存する
     // OneMoreのDatabase上にchildメソッドで値を格納するConst.PostPathの場所を格納する
     let postRef = Database.database().reference().child(Const.PostPath)
     // 保存したい値を辞書を作成し、PostDataクラスの変数名に値を格納する
-    let postData = ["caption": textField.text!, "image": imageString, "time": String(time), "name": name!]
+      let postData = ["caption": self.textField.text!, "image": imageString, "time": String(time), "name": name!] 
     // setValue(_:)メソッドでFirebaseに保存した後はHUDで投稿完了をユーザーに伝える。
     postRef.childByAutoId().setValue(postData)
-    
-    // HUDで投稿完了を表示する
-    SVProgressHUD.showSuccess(withStatus: "投稿しました")
-    
-    // 全てのモーダルを閉じる
-    // この時、画像選択画面、画像加工画面、この投稿画面と、3つの画面がモーダルで画面遷移しているため、全てを閉じる必要が出てきます。以下の記述で全てのモーダルを閉じて先頭の画面に戻ることができる。
-    UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
-    
-    let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "Management") as! UINavigationController
-    
-    self.present(navigationController, animated: true, completion: nil)
+      
+      // HUDで投稿完了を表示する
+      SVProgressHUD.showSuccess(withStatus: "投稿しました")
+      
+      // 全てのモーダルを閉じる
+      // この時、画像選択画面、画像加工画面、この投稿画面と、3つの画面がモーダルで画面遷移しているため、全てを閉じる必要が出てきます。以下の記述で全てのモーダルを閉じて先頭の画面に戻ることができる。
+      UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
     
     // 投稿ボタンをタップした時に各Switchの状態を保存し、各Switchがtrueの状態の時に各Realmファイルに保存をする
-    
-    // Date.timeIntervalSinceReferenceDateメソッドだけを取り出し、コードの量を減らす
-    let timer = Date.timeIntervalSinceReferenceDate
     
     // Allファイルにデータを保存する
     let all = All()
     
-    let allArray = realm.objects(All.self)
+      let allArray = self.realm.objects(All.self)
     // もしもallArrayのcountプロパティが0じゃなかったら
     if allArray.count != 0 {
       all.id = allArray.max(ofProperty: "id")! + 1
     }
-    try! realm.write {
+      try! self.realm.write {
       // 投稿された全てのデータをこのAllに保存する
       all.caption = self.textField.text!
       all.userName = (Auth.auth().currentUser?.displayName!)!
       all.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
       // 日付の値を取得する
-      all.time = String(timer)
-      realm.add(all, update: true)
+      all.time = Date()
+        self.realm.add(all, update: true)
     }
     
     // もしもMorningSwitchがtrueだったら
-    if morningSwitch.isOn == true {
+    if self.morningSwitch.isOn == true {
       let morning = Morning()
 
-      let morningArray = realm.objects(Morning.self)
+      let morningArray = self.realm.objects(Morning.self)
       // もしもmorningArrayのcountプロパティが0じゃなかったら
       if morningArray.count != 0 {
         morning.id = morningArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+      try! self.realm.write {
         // タグmorningに投稿情報が保存される時
         morning.caption = self.textField.text!
         morning.userName = (Auth.auth().currentUser?.displayName!)!
         morning.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         morning.time = Date()
-        realm.add(morning, update: true)
+        self.realm.add(morning, update: true)
       }
     }
     
     // もしもNoonSwitchがtrueだったら
-    if noonSwitch.isOn == true {
+      if self.noonSwitch.isOn == true {
       let noon = Noon()
   
-      let noonArray = realm.objects(Noon.self)
+        let noonArray = self.realm.objects(Noon.self)
       // もしもnoonArrayのcountプロパティが0じゃなかったら
       if noonArray.count != 0 {
         noon.id = noonArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         // タグnoonに投稿情報が保存される時
         noon.caption = self.textField.text!
         noon.userName = (Auth.auth().currentUser?.displayName!)!
         noon.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         noon.time = Date()
-        realm.add(noon, update: true)
+          self.realm.add(noon, update: true)
       }
     }
     
     // もしもNightSwitchがtrueだったら
-    if nightSwitch.isOn == true {
+      if self.nightSwitch.isOn == true {
       let night = Night()
       
-      let nightArray = realm.objects(Night.self)
+        let nightArray = self.realm.objects(Night.self)
       // もしもnightArrayのcountプロパティが0じゃなかったら
       if nightArray.count != 0 {
         night.id = nightArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         // タグnightに投稿情報が保存される時
         night.caption = self.textField.text!
         night.userName = (Auth.auth().currentUser?.displayName!)!
         night.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         night.time = Date()
-        realm.add(night, update: true)
+          self.realm.add(night, update: true)
       }
     }
     
     // もしもupperBodySwitchがtrueだったら
-    if upperBodySwitch.isOn == true {
+      if self.upperBodySwitch.isOn == true {
       let upperBody = UpperBody()
       
-      let upperBodyArray = realm.objects(UpperBody.self)
+        let upperBodyArray = self.realm.objects(UpperBody.self)
       // もしもupperBodyのcountプロパティが0じゃなかったら
       if upperBodyArray.count != 0 {
         upperBody.id = upperBodyArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         // タグupperBodyに投稿情報が保存される時
         upperBody.caption = self.textField.text!
         upperBody.userName = (Auth.auth().currentUser?.displayName!)!
         upperBody.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         upperBody.time = Date()
-        realm.add(upperBody, update: true)
+          self.realm.add(upperBody, update: true)
       }
     }
     
     // もしもlowerBodySwitchがtrueだったら
-    if lowerBodySwitch.isOn == true {
+      if self.lowerBodySwitch.isOn == true {
       let lowerBody = LowerBody()
       
-      let LowerBodyArray = realm.objects(LowerBody.self)
+        let LowerBodyArray = self.realm.objects(LowerBody.self)
       // もしもlowerBodyのcountプロパティが0じゃなかったら
       if LowerBodyArray.count != 0 {
         lowerBody.id = LowerBodyArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         // タグlowerBodyに投稿情報が保存される時
         lowerBody.caption = self.textField.text!
         lowerBody.userName = (Auth.auth().currentUser?.displayName!)!
         lowerBody.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         lowerBody.time = Date()
-        realm.add(lowerBody, update: true)
+          self.realm.add(lowerBody, update: true)
       }
     }
     
     // もしもchestSwitchがtrueだったら
-    if chestSwitch.isOn == true {
+      if self.chestSwitch.isOn == true {
       let chest = Chest()
       
-      let chestArray = realm.objects(Chest.self)
+        let chestArray = self.realm.objects(Chest.self)
       // もしもchestArrayのCountプロパティが0じゃなかったら
       if chestArray.count != 0 {
         chest.id = chestArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         // タグchestに投稿情報が保存される時
         chest.caption = self.textField.text!
         chest.userName = (Auth.auth().currentUser?.displayName!)!
         chest.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         chest.time = Date()
-        realm.add(chest, update: true)
+          self.realm.add(chest, update: true)
       }
     }
     
     // もしもbackSwitchがtrueだったら
-    if backSwitch.isOn == true {
+      if self.backSwitch.isOn == true {
       let back = Back()
       
-      let backArray = realm.objects(Back.self)
+        let backArray = self.realm.objects(Back.self)
       // もしもBackArrayのCountプロパティが0じゃなかったら
       if backArray.count != 0 {
         back.id = backArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         // タグbackに投稿情報が保存される時
         back.caption = self.textField.text!
         back.userName = (Auth.auth().currentUser?.displayName!)!
         back.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         back.time = Date()
-        realm.add(back, update: true)
+          self.realm.add(back, update: true)
       }
     }
     
     // もしもabsSwitchがtrueだったら
-    if absSwitch.isOn == true {
+      if self.absSwitch.isOn == true {
       let abs = Abs()
       
-      let absArray = realm.objects(Abs.self)
+        let absArray = self.realm.objects(Abs.self)
       // もしもabsArraryのcountプロパティが0じゃなかったら
       if absArray.count != 0 {
         abs.id = absArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         // タグabsに投稿情報が保存される時
         abs.caption = self.textField.text!
         abs.userName = (Auth.auth().currentUser?.displayName!)!
         abs.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         abs.time = Date()
-        realm.add(abs, update: true)
+          self.realm.add(abs, update: true)
       }
     }
     
     // もしもbicepsSwitchがtrueだったら
-    if bicepsSwitch.isOn == true {
+      if self.bicepsSwitch.isOn == true {
       let biceps = Biceps()
       
-      let bicepsArray = realm.objects(Biceps.self)
+        let bicepsArray = self.realm.objects(Biceps.self)
       // もしもbicepsArrayのcountプロパティがじゃなかったら
       if bicepsArray.count != 0 {
         biceps.id = bicepsArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         // タグbicepsに投稿情報が保存される時
         biceps.caption = self.textField.text!
         biceps.userName = (Auth.auth().currentUser?.displayName!)!
         biceps.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         biceps.time = Date()
-        realm.add(biceps, update: true)
+          self.realm.add(biceps, update: true)
       }
     }
     
     // もしもtricepsSwitchがtrueだったら
-    if tricepsSwitch.isOn == true {
+      if self.tricepsSwitch.isOn == true {
       let triceps = Triceps()
       
-      let tricepsArray = realm.objects(Triceps.self)
+        let tricepsArray = self.realm.objects(Triceps.self)
       // もしもTricepsArrayのcountプロパティが0じゃなかったら
       if tricepsArray.count != 0 {
         triceps.id = tricepsArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         // タグtricepsに投稿情報が保存される時
         triceps.caption = self.textField.text!
         triceps.userName = (Auth.auth().currentUser?.displayName!)!
         triceps.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         triceps.time = Date()
-        realm.add(triceps, update: true)
+          self.realm.add(triceps, update: true)
       }
     }
     
     // もしもsholderSwitchがtrueだったら
-    if sholderSwitch.isOn == true {
+      if self.sholderSwitch.isOn == true {
       let sholder = Sholder()
       
-      let sholderArray = realm.objects(Sholder.self)
+        let sholderArray = self.realm.objects(Sholder.self)
       // もしもsholderArrayのcountプロパティが0じゃなかったら
       if sholderArray.count != 0  {
         sholder.id = sholderArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         // タグsholderに投稿情報が保存される時
         sholder.caption = self.textField.text!
         sholder.userName = (Auth.auth().currentUser?.displayName!)!
         sholder.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         sholder.time = Date()
-        realm.add(sholder, update: true)
+          self.realm.add(sholder, update: true)
       }
     }
     
     // もしもlegSwitchがtrueだったら
-    if legSwitch.isOn == true {
+      if self.legSwitch.isOn == true {
       let leg = Leg()
       
-      let legArray = realm.objects(Leg.self)
+        let legArray = self.realm.objects(Leg.self)
       // もしもlegArrayのcountプロパティが0じゃなかったら
       if legArray.count != 0 {
         leg.id = legArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         // タグlegに投稿情報が保存される時
         leg.caption = self.textField.text!
         leg.userName = (Auth.auth().currentUser?.displayName!)!
         leg.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         leg.time = Date()
-        realm.add(leg, update: true)
+          self.realm.add(leg, update: true)
       }
     }
     
     // もしもfootSwitchがtrueだったら
-    if footSwitch.isOn == true {
+      if self.footSwitch.isOn == true {
       let foot = Foot()
       
-      let footArray = realm.objects(Foot.self)
+        let footArray = self.realm.objects(Foot.self)
       // もしもfootArrayのcountプロパティが0じゃなかったら
       if footArray.count != 0 {
         foot.id = footArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         foot.caption = self.textField.text!
-        foot.UserName =
+        foot.userName =
         (Auth.auth().currentUser?.displayName!)!
-        foot.ImageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+        foot.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         foot.time = Date()
-        realm.add(foot, update: true)
+          self.realm.add(foot, update: true)
       }
     }
     
     // もしもassSwitchがtrueだったら
-    if assSwitch.isOn == true {
+      if self.assSwitch.isOn == true {
       let ass = Ass()
       
-      let assArray = realm.objects(Ass.self)
+        let assArray = self.realm.objects(Ass.self)
       // もしもassArrayのcountプロパティが0じゃなかったら
       if assArray.count != 0 {
         ass.id = assArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         // タグassに投稿情報が保存される時
         ass.caption = self.textField.text!
         ass.userName = (Auth.auth().currentUser?.displayName!)!
         ass.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         ass.time = Date()
-        realm.add(ass, update: true)
+          self.realm.add(ass, update: true)
       }
     }
     
     // もしもcalfSwitchがtrueだったら
-    if calfSwitch.isOn == true {
+      if self.calfSwitch.isOn == true {
       let calf = Calf()
       
-      let calfArray = realm.objects(Calf.self)
+        let calfArray = self.realm.objects(Calf.self)
       // もしもcalfArrayのcountプロパティが0じゃなかったら
       if calfArray.count != 0 {
         calf.id = calfArray.max(ofProperty: "id")! + 1
       }
-      try! realm.write {
+        try! self.realm.write {
         // タグcalfに投稿情報が保存される時
         calf.caption = self.textField.text!
         calf.userName = (Auth.auth().currentUser?.displayName!)!
         calf.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
         // 日付の値を取得する
         calf.time = Date()
-        realm.add(calf, update: true)
+          self.realm.add(calf, update: true)
       }
     }
   }
-  
+    // 非公開ボタンをタップした時に動作する
+    let noShare = UIAlertAction(title: "非公開", style: .default) { (action: UIAlertAction) in
+      
+      // HUDで投稿完了を表示する
+      SVProgressHUD.showSuccess(withStatus: "投稿しました")
+      
+      // 全てのモーダルを閉じる
+      // この時、画像選択画面、画像加工画面、この投稿画面と、3つの画面がモーダルで画面遷移しているため、全てを閉じる必要が出てきます。以下の記述で全てのモーダルを閉じて先頭の画面に戻ることができる。
+      UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+      
+      // 投稿ボタンをタップした時に各Switchの状態を保存し、各Switchがtrueの状態の時に各Realmファイルに保存をする
+      
+      // Allファイルにデータを保存する
+      let all = All()
+      
+      let allArray = self.realm.objects(All.self)
+      // もしもallArrayのcountプロパティが0じゃなかったら
+      if allArray.count != 0 {
+        all.id = allArray.max(ofProperty: "id")! + 1
+      }
+      try! self.realm.write {
+        // 投稿された全てのデータをこのAllに保存する
+        all.caption = self.textField.text!
+        all.userName = (Auth.auth().currentUser?.displayName!)!
+        all.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+        // 日付の値を取得する
+        all.time = Date()
+        self.realm.add(all, update: true)
+      }
+      
+      // もしもMorningSwitchがtrueだったら
+      if self.morningSwitch.isOn == true {
+        let morning = Morning()
+        
+        let morningArray = self.realm.objects(Morning.self)
+        // もしもmorningArrayのcountプロパティが0じゃなかったら
+        if morningArray.count != 0 {
+          morning.id = morningArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグmorningに投稿情報が保存される時
+          morning.caption = self.textField.text!
+          morning.userName = (Auth.auth().currentUser?.displayName!)!
+          morning.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          morning.time = Date()
+          self.realm.add(morning, update: true)
+        }
+      }
+      
+      // もしもNoonSwitchがtrueだったら
+      if self.noonSwitch.isOn == true {
+        let noon = Noon()
+        
+        let noonArray = self.realm.objects(Noon.self)
+        // もしもnoonArrayのcountプロパティが0じゃなかったら
+        if noonArray.count != 0 {
+          noon.id = noonArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグnoonに投稿情報が保存される時
+          noon.caption = self.textField.text!
+          noon.userName = (Auth.auth().currentUser?.displayName!)!
+          noon.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          noon.time = Date()
+          self.realm.add(noon, update: true)
+        }
+      }
+      
+      // もしもNightSwitchがtrueだったら
+      if self.nightSwitch.isOn == true {
+        let night = Night()
+        
+        let nightArray = self.realm.objects(Night.self)
+        // もしもnightArrayのcountプロパティが0じゃなかったら
+        if nightArray.count != 0 {
+          night.id = nightArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグnightに投稿情報が保存される時
+          night.caption = self.textField.text!
+          night.userName = (Auth.auth().currentUser?.displayName!)!
+          night.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          night.time = Date()
+          self.realm.add(night, update: true)
+        }
+      }
+      
+      // もしもupperBodySwitchがtrueだったら
+      if self.upperBodySwitch.isOn == true {
+        let upperBody = UpperBody()
+        
+        let upperBodyArray = self.realm.objects(UpperBody.self)
+        // もしもupperBodyのcountプロパティが0じゃなかったら
+        if upperBodyArray.count != 0 {
+          upperBody.id = upperBodyArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグupperBodyに投稿情報が保存される時
+          upperBody.caption = self.textField.text!
+          upperBody.userName = (Auth.auth().currentUser?.displayName!)!
+          upperBody.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          upperBody.time = Date()
+          self.realm.add(upperBody, update: true)
+        }
+      }
+      
+      // もしもlowerBodySwitchがtrueだったら
+      if self.lowerBodySwitch.isOn == true {
+        let lowerBody = LowerBody()
+        
+        let LowerBodyArray = self.realm.objects(LowerBody.self)
+        // もしもlowerBodyのcountプロパティが0じゃなかったら
+        if LowerBodyArray.count != 0 {
+          lowerBody.id = LowerBodyArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグlowerBodyに投稿情報が保存される時
+          lowerBody.caption = self.textField.text!
+          lowerBody.userName = (Auth.auth().currentUser?.displayName!)!
+          lowerBody.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          lowerBody.time = Date()
+          self.realm.add(lowerBody, update: true)
+        }
+      }
+      
+      // もしもchestSwitchがtrueだったら
+      if self.chestSwitch.isOn == true {
+        let chest = Chest()
+        
+        let chestArray = self.realm.objects(Chest.self)
+        // もしもchestArrayのCountプロパティが0じゃなかったら
+        if chestArray.count != 0 {
+          chest.id = chestArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグchestに投稿情報が保存される時
+          chest.caption = self.textField.text!
+          chest.userName = (Auth.auth().currentUser?.displayName!)!
+          chest.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          chest.time = Date()
+          self.realm.add(chest, update: true)
+        }
+      }
+      
+      // もしもbackSwitchがtrueだったら
+      if self.backSwitch.isOn == true {
+        let back = Back()
+        
+        let backArray = self.realm.objects(Back.self)
+        // もしもBackArrayのCountプロパティが0じゃなかったら
+        if backArray.count != 0 {
+          back.id = backArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグbackに投稿情報が保存される時
+          back.caption = self.textField.text!
+          back.userName = (Auth.auth().currentUser?.displayName!)!
+          back.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          back.time = Date()
+          self.realm.add(back, update: true)
+        }
+      }
+      
+      // もしもabsSwitchがtrueだったら
+      if self.absSwitch.isOn == true {
+        let abs = Abs()
+        
+        let absArray = self.realm.objects(Abs.self)
+        // もしもabsArraryのcountプロパティが0じゃなかったら
+        if absArray.count != 0 {
+          abs.id = absArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグabsに投稿情報が保存される時
+          abs.caption = self.textField.text!
+          abs.userName = (Auth.auth().currentUser?.displayName!)!
+          abs.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          abs.time = Date()
+          self.realm.add(abs, update: true)
+        }
+      }
+      
+      // もしもbicepsSwitchがtrueだったら
+      if self.bicepsSwitch.isOn == true {
+        let biceps = Biceps()
+        
+        let bicepsArray = self.realm.objects(Biceps.self)
+        // もしもbicepsArrayのcountプロパティがじゃなかったら
+        if bicepsArray.count != 0 {
+          biceps.id = bicepsArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグbicepsに投稿情報が保存される時
+          biceps.caption = self.textField.text!
+          biceps.userName = (Auth.auth().currentUser?.displayName!)!
+          biceps.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          biceps.time = Date()
+          self.realm.add(biceps, update: true)
+        }
+      }
+      
+      // もしもtricepsSwitchがtrueだったら
+      if self.tricepsSwitch.isOn == true {
+        let triceps = Triceps()
+        
+        let tricepsArray = self.realm.objects(Triceps.self)
+        // もしもTricepsArrayのcountプロパティが0じゃなかったら
+        if tricepsArray.count != 0 {
+          triceps.id = tricepsArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグtricepsに投稿情報が保存される時
+          triceps.caption = self.textField.text!
+          triceps.userName = (Auth.auth().currentUser?.displayName!)!
+          triceps.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          triceps.time = Date()
+          self.realm.add(triceps, update: true)
+        }
+      }
+      
+      // もしもsholderSwitchがtrueだったら
+      if self.sholderSwitch.isOn == true {
+        let sholder = Sholder()
+        
+        let sholderArray = self.realm.objects(Sholder.self)
+        // もしもsholderArrayのcountプロパティが0じゃなかったら
+        if sholderArray.count != 0  {
+          sholder.id = sholderArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグsholderに投稿情報が保存される時
+          sholder.caption = self.textField.text!
+          sholder.userName = (Auth.auth().currentUser?.displayName!)!
+          sholder.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          sholder.time = Date()
+          self.realm.add(sholder, update: true)
+        }
+      }
+      
+      // もしもlegSwitchがtrueだったら
+      if self.legSwitch.isOn == true {
+        let leg = Leg()
+        
+        let legArray = self.realm.objects(Leg.self)
+        // もしもlegArrayのcountプロパティが0じゃなかったら
+        if legArray.count != 0 {
+          leg.id = legArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグlegに投稿情報が保存される時
+          leg.caption = self.textField.text!
+          leg.userName = (Auth.auth().currentUser?.displayName!)!
+          leg.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          leg.time = Date()
+          self.realm.add(leg, update: true)
+        }
+      }
+      
+      // もしもfootSwitchがtrueだったら
+      if self.footSwitch.isOn == true {
+        let foot = Foot()
+        
+        let footArray = self.realm.objects(Foot.self)
+        // もしもfootArrayのcountプロパティが0じゃなかったら
+        if footArray.count != 0 {
+          foot.id = footArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          foot.caption = self.textField.text!
+          foot.userName =
+            (Auth.auth().currentUser?.displayName!)!
+          foot.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          foot.time = Date()
+          self.realm.add(foot, update: true)
+        }
+      }
+      
+      // もしもassSwitchがtrueだったら
+      if self.assSwitch.isOn == true {
+        let ass = Ass()
+        
+        let assArray = self.realm.objects(Ass.self)
+        // もしもassArrayのcountプロパティが0じゃなかったら
+        if assArray.count != 0 {
+          ass.id = assArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグassに投稿情報が保存される時
+          ass.caption = self.textField.text!
+          ass.userName = (Auth.auth().currentUser?.displayName!)!
+          ass.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          ass.time = Date()
+          self.realm.add(ass, update: true)
+        }
+      }
+      
+      // もしもcalfSwitchがtrueだったら
+      if self.calfSwitch.isOn == true {
+        let calf = Calf()
+        
+        let calfArray = self.realm.objects(Calf.self)
+        // もしもcalfArrayのcountプロパティが0じゃなかったら
+        if calfArray.count != 0 {
+          calf.id = calfArray.max(ofProperty: "id")! + 1
+        }
+        try! self.realm.write {
+          // タグcalfに投稿情報が保存される時
+          calf.caption = self.textField.text!
+          calf.userName = (Auth.auth().currentUser?.displayName!)!
+          calf.imageString = imageData!.base64EncodedString(options: .lineLength64Characters)
+          // 日付の値を取得する
+          calf.time = Date()
+          self.realm.add(calf, update: true)
+        }
+      }
+    }
+    // alertViewにaddActionでそれぞれのactionを追加する
+    alertView.addAction(share)
+    alertView.addAction(noShare)
+    
+    self.present(alertView, animated: true, completion: nil)
+  }
+
   // キャンセルボタンをタップした時に呼ばれるメソッド
   @IBAction func handleCancelButton(_ sender: Any) {
     // 画面を閉じる
-    self.dismiss(animated: true, completion: nil)
+    dismiss(animated: true, completion: nil)
   }
-  
   
   // 一番最初にこの画面が呼ばれた時に呼び出される
   override func viewDidLoad() {
@@ -459,12 +796,6 @@ class PostViewController: UIViewController, UITextViewDelegate {
         // Dispose of any resources that can be recreated.
     }
   
-  
-  
-  // 別の画面に遷移する直前に呼び出される
-  override func viewWillDisappear(_ animated: Bool) {
-  }
-  
   @objc func dismissKeyboard() {
     // キーボードを閉じる
     view.endEditing(true)
@@ -486,7 +817,7 @@ class PostViewController: UIViewController, UITextViewDelegate {
       }
     }
   }
-
+ 
     /*
     // MARK: - Navigation
 

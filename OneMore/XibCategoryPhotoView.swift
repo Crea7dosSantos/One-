@@ -11,6 +11,7 @@ import UIKit
 class XibCategoryPhotoView: UIView {
   @IBOutlet weak var timeView: UIView!
   @IBOutlet weak var muscleView: UIView!
+  @IBOutlet weak var categoryView: UIView!
   @IBOutlet weak var morningButton: UIButton!
   @IBOutlet weak var noonButton: UIButton!
   @IBOutlet weak var nightButton: UIButton!
@@ -24,6 +25,8 @@ class XibCategoryPhotoView: UIView {
   @IBOutlet weak var sholderButton: UIButton!
   @IBOutlet weak var legButton: UIButton!
   @IBOutlet weak var calfButton: UIButton!
+  @IBOutlet weak var footButton: UIButton!
+  @IBOutlet weak var assButton: UIButton!
   
   override init(frame: CGRect) {
     super.init(frame: frame)

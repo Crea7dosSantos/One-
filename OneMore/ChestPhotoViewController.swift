@@ -48,20 +48,18 @@ class ChestPhotoViewController: UIViewController, UICollectionViewDelegate, UICo
     return chestArray.count
   }
   
+  var imageArray = [UIImage]()
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = chestCollectionView.dequeueReusableCell(withReuseIdentifier: "ChestCell", for: indexPath) as! ChestPhotoViewCell
-    if chestArray.count == 0 {
-      print("DEBUG_PRINT: chestArrayのデータが0です")
-    } else if chestArray.count > 0 {
-      print("DEBUG_PRINT: chestArrayのデータが0以上です")
-      
+   
       // for文でchestArrayをloopさせ全ての要素を取り出す
       for chestArrayValue in chestArray {
         var image: UIImage
         image = UIImage(data: Data(base64Encoded: chestArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
-        cell.imageView.image = image
-      }
+        imageArray.append(image)
     }
+    cell.imageView.image = imageArray[indexPath.row]
     return cell
   }
   

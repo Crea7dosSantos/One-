@@ -46,20 +46,18 @@ class TricepsPhotoViewController: UIViewController, UICollectionViewDelegate, UI
     return tricepsArray.count
   }
   
+  var imageArray = [UIImage]()
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = tricepsCollectionView.dequeueReusableCell(withReuseIdentifier: "TricepsCell", for: indexPath) as! TricepsPhotoViewCell
-    if tricepsArray.count == 0 {
-      print("DEBUG_PRINT: tricepsArrayのデータが0です")
-    } else if tricepsArray.count > 0 {
-      print("DEBUG_PRINT: tricepsArrayのデータが0以上です")
       
       // for文でtricepsArrayをloopさせ全ての要素を取り出す
       for tricepsArrayValue in tricepsArray {
         var image: UIImage
         image = UIImage(data: Data(base64Encoded: tricepsArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
-        cell.imageView.image = image
-      }
+        imageArray.append(image)
     }
+    cell.imageView.image = imageArray[indexPath.row]
     return cell
   }
   

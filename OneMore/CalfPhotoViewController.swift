@@ -47,19 +47,18 @@ class CalfPhotoViewController: UIViewController, UICollectionViewDelegate, UICol
     return calfArray.count
   }
   
+  var imageArray = [UIImage]()
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = calfCollectionView.dequeueReusableCell(withReuseIdentifier: "CalfCell", for: indexPath) as! CalfPhotoViewCell
-    if calfArray.count == 0 {
-      print("DEBUG_PRINT: calfArrayのデータが0です")
-    } else if calfArray.count > 0 {
-      print("DEBUG_PRINT: calfArrayのデータが0以上です")
+    
       // for文でcalfArrayをloopさせ全ての要素を取り出す
       for calfArrayValue in calfArray {
         var image: UIImage
         image = UIImage(data: Data(base64Encoded: calfArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
-        cell.imageView.image = image
-      }
+       imageArray.append(image)
     }
+    cell.imageView.image = imageArray[indexPath.row]
     return cell
   }
   

@@ -47,19 +47,18 @@ class LegPhotoViewController: UIViewController, UICollectionViewDelegate, UIColl
     return legArray.count
   }
   
+  var imageArray = [UIImage]()
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = legCollectionView.dequeueReusableCell(withReuseIdentifier: "LegCell", for: indexPath) as! LegPhotoViewCell
-    if legArray.count == 0 {
-      print("DEBUG_PRINT: legArrayのデータが0です")
-    } else if legArray.count > 0 {
-      print("DEBUG_PRINT: legArrayのデータが0以上です")
+    
       // for文でlegArrayをloopさせ全ての要素を取り出す
       for legArrayValue in legArray {
         var image: UIImage
         image = UIImage(data: Data(base64Encoded: legArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
-        cell.imageView.image = image
-      }
+        imageArray.append(image)
     }
+    cell.imageView.image = imageArray[indexPath.row]
     return cell
   }
   

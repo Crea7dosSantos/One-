@@ -52,23 +52,21 @@ class MorningPhotoViewController: UIViewController, UICollectionViewDelegate, UI
     return morningArray.count
   }
   
+  // 変数imageArray をメソッドのスコープの外で定義
+  var imageArray = [UIImage]()
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = categoryCollectionView.dequeueReusableCell(withReuseIdentifier: "MorningCell", for: indexPath) as! MorningPhotoViewCell
-    if morningArray.count == 0 {
-      print("DEBUG_PRINT: morningArrayのデータが0です")
-    } else if morningArray.count > 0 {
-      print("DEBUG_PRINT: morningArrayのデータが0以上です")
       
       // for文でmorningArrayをloopさせ全ての要素を取り出す
       for morningArrayValue in morningArray {
         var image: UIImage
         image = UIImage(data: Data(base64Encoded: morningArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
-      
-          cell.imageView.image = image
+        imageArray.append(image)
           print("DEBUG_PRINT: cellのイメージに値をセットしました。")
           print("DEBUG_PRINT: \(String(describing: cell.imageView.image))")
       }
-    }
+    cell.imageView.image = imageArray[indexPath.row]
     return cell
   }
 

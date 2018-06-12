@@ -48,19 +48,18 @@ class UpperBodyPhotoViewController: UIViewController, UICollectionViewDelegate, 
     return upperBodyArray.count
   }
   
+  var imageArray = [UIImage]()
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = upperBodyCollectionView.dequeueReusableCell(withReuseIdentifier: "UpperBodyCell", for: indexPath) as! UpperBodyPhotoViewCell
-    if upperBodyArray.count == 0 {
-      print("DEBUG_PRINT: upperBodyArrayのデータが0です")
-    } else if upperBodyArray.count > 0 {
-      print("DEBUG_PRINT: upperBodyArrayのデータが0以上です")
+    
       // for文でupperBodyArrayをloopさせ全ての要素を取り出す
       for upperBodyArrayValue in upperBodyArray {
         var image: UIImage
         image = UIImage(data: Data(base64Encoded: upperBodyArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
-        cell.imageView.image = image
+        imageArray.append(image)
       }
-    }
+    cell.imageView.image = imageArray[indexPath.row]
     return cell
   }
   

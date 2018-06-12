@@ -11,7 +11,7 @@ import Firebase
 import FirebaseAuth
 import SVProgressHUD
 
-class AccountCreateViewController: UIViewController {
+class AccountCreateViewController: UIViewController, UITextFieldDelegate {
   @IBOutlet weak var displayNameTextField: UITextField!
   @IBOutlet weak var passwordTextField: UITextField!
   @IBOutlet weak var mailAddressTextField: UITextField!
@@ -74,6 +74,13 @@ class AccountCreateViewController: UIViewController {
     let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
     self.view.addGestureRecognizer(tapGesture)
     
+    displayNameTextField.delegate = self
+    passwordTextField.delegate = self
+    mailAddressTextField.delegate = self
+    
+    displayNameTextField.returnKeyType = .done
+    passwordTextField.returnKeyType = .done
+    mailAddressTextField.returnKeyType = .done
     
 
         // Do any additional setup after loading the view.
@@ -88,6 +95,11 @@ class AccountCreateViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+  
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    textField.resignFirstResponder()
+    return true
+  }
     
 
     /*

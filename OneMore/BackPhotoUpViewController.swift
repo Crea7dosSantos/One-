@@ -27,7 +27,7 @@ class BackPhotoUpViewController: UIViewController {
       formatter.dateFormat = "yyyy/MM/dd HH:mm"
       let dateString = formatter.string(from: (photoInformation?.time)!)
       dateLabel.text = dateString
-
+      navigationItem.title = "記録"
         // Do any additional setup after loading the view.
     }
 

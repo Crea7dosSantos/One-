@@ -49,20 +49,18 @@ class NightPhotoViewController: UIViewController, UICollectionViewDelegate, UICo
     return nightArray.count
   }
   
+  var imageArray = [UIImage]()
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = nightCollectionView.dequeueReusableCell(withReuseIdentifier: "NightCell", for: indexPath) as! NightPhotoViewCell
-    if nightArray.count == 0 {
-      print("DEBUG_PRINT: nightArrayのデータが0です")
-    } else if nightArray.count > 0 {
-      print("DEBUG_PRINT: nightArrayのデータが0以上です")
-      
+   
       // for文でnightArrayをloopさせ全ての要素を取り出す
       for nightArrayValue in nightArray {
-        var image: UIImage?
+        var image: UIImage
         image = UIImage(data: Data(base64Encoded: nightArrayValue.imageString, options: .ignoreUnknownCharacters)!)!
-        cell.imageView.image = image
+        imageArray.append(image)
       }
-    }
+    cell.imageView.image = imageArray[indexPath.row]
     return cell
   }
   
