@@ -91,6 +91,7 @@ class SelfManagementViewController: UIViewController, UITextViewDelegate, UIColl
     self.profielImageView.layer.masksToBounds = true
     
     // profielViewに下線を表示する
+    // ここからUIに線を各プログラムを記述する
     let weightBorder = CALayer()
     weightBorder.frame = CGRect(x: 0, y: profielView.frame.height, width: profielView.frame.width, height: 1.0)
     weightBorder.backgroundColor = UIColor.lightGray.cgColor

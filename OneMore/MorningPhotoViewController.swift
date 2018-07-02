@@ -16,7 +16,7 @@ class MorningPhotoViewController: UIViewController, UICollectionViewDelegate, UI
   
   let realm = try! Realm()
   
-  var morningArray = try! Realm().objects(Morning.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")
+  var morningArray = try! Realm().objects(Morning.self).sorted(byKeyPath: "id", ascending: false).filter("userName == %@", Auth.auth().currentUser?.displayName ?? "")   // ??で取得失敗時のデフォルト値を与えている
   
   var categoryXib: XibCategoryPhotoView!
   

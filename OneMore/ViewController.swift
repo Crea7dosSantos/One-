@@ -32,6 +32,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // tabBarのメソッドをViewDidLoad内で実行する
     setupTab()
     
+    // leftButtonのactionメソッドを作成するためにUIBarButtonItemのインスタンスを作成する
+    
   }
 
   override func didReceiveMemoryWarning() {
@@ -42,6 +44,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
   func setupTab() {
     
     // 画像のファイル名を指定してESTabBarControllerを作成する
+    // ここのforced UnwrappedはsetupTabがViewDidLoadのメソッド内で記述されているのでViewDidLoadで呼ばれたときに生成される。なぜなら強制的なアンラップをしないと容量を使いすぎてしまうから 
     let tabBarController: ESTabBarController! = ESTabBarController(tabIconNames: ["fire", "camera", "lineGraph", "management"])
     
     // 背景色、選択時の色を設定する
@@ -110,9 +113,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
   
   // キャンセルした時に呼ばれるDelegate
   func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-    
     // dismissメソッドで今開いている画面を閉じる
     picker.dismiss(animated: true, completion: nil)
+  }
+  
+  // NavigationControllerで画面遷移したタイミングで呼び出されるメソッド
+  // このメソッドの中で画像加工画面の左側のBarButtonItemを任意のボタンにする
+  func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+    let pickerController = navigationController as! UIImagePickerController
+    if pickerController.sourceType == .camera {
+      viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonDidPush))
+    }
+  }
+  // 画像加工画面のleftBarButtonItemのアクションメソッドでUIImagePickerControllerを閉じる
+  @objc func cancelButtonDidPush() {
+    dismiss(animated: true, completion: nil)
   }
   
   // CLImageEditorで加工が終わった時に呼ばれるメソッド
@@ -127,7 +142,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     postViewController.image = image!
     editor.present(navigationController, animated: true, completion: nil)
   }
- 
+
 }
 
 

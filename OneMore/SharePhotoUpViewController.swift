@@ -42,7 +42,7 @@ class SharePhotoUpViewController: UIViewController, UITableViewDelegate, UITable
       self.tableView.allowsSelection = false
       // tableViewのseparatorColorを透明にする
       self.tableView.separatorColor = UIColor.clear
-      
+     
       print("DEBUG_PRINT: viewDidLoad")
       // moreの配列の中にログインしているユーザーのidがあるかを確認してある場合とない場合の処理を記述する
       
@@ -169,9 +169,12 @@ class SharePhotoUpViewController: UIViewController, UITableViewDelegate, UITable
     for comment in photoInformation.commentList {
       commentArray.append(comment)
     }
+    cell.textLabel?.numberOfLines = 0
     cell.textLabel?.text = commentArray[indexPath.row]
   return cell
   }
+  
+ 
   
   
 

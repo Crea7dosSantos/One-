@@ -293,6 +293,13 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
   }
   
   @IBAction func handleLogoutButtonAction(_ sender: Any) {
+    let logoutAlertView: UIAlertController = UIAlertController(title: "ログアウトをしてもよろしいですか？", message: "ログアウトをすると一部のデータが消去されます。", preferredStyle: UIAlertControllerStyle.alert)
+    
+    let notLogout = UIAlertAction(title: "キャンセル", style: .default) { (action: UIAlertAction) in
+      print("logoutキャンセルがタップされた")
+    }
+    let logout = UIAlertAction(title: "ログアウト", style: .destructive) { (action: UIAlertAction) in
+  
     // ログアウトする
     try! Auth.auth().signOut()
     
@@ -302,7 +309,13 @@ class SettingViewController: UIViewController, UIImagePickerControllerDelegate, 
     // ログイン画面を表示する
     let loginViewControlelr = self.storyboard?.instantiateViewController(withIdentifier: "Login")
     self.present(loginViewControlelr!, animated: true, completion: nil)
+    }
     
+    // logoutAlertViewにaddActionでそれぞれのactionを追加する
+    logoutAlertView.addAction(notLogout)
+    logoutAlertView.addAction(logout)
+    
+    self.present(logoutAlertView, animated: true, completion: nil)
     // ログイン画面から戻ってきた時のためにSelf管理画面(index = 0)を選択している状態にしておく
     //let tabBarController = parent as! ESTabBarController
     //tabBarController.setSelectedIndex(0, animated: true)
